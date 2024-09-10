@@ -1,1 +1,5 @@
 @import './base.css';
+
+body {
+    scrollbar-color: #e00808 #2a0505;
+}

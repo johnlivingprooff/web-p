@@ -1,9 +1,10 @@
 <script>
 import Welcome from '@/components/Welcome.vue';
 import About from '@/components/About.vue';
+import Clients from '@/components/Clients.vue';
 export default {
   components: {
-    Welcome, About,
+    Welcome, About, Clients
   },
   mounted() {
     const observer = new IntersectionObserver((entries) => {
@@ -25,15 +26,14 @@ export default {
 
 <template>
   <main>
-    <section class="hidden">
-      <img src="/logo.png" alt="logo-house" id="logo" class="scroll-logo">
-    </section>
     <section class="hidden contnr">
+      <img src="/logo.png" alt="logo-house" id="logo" class="scroll-logo">
       <Welcome />
     </section>
-    <section class="hidden">
+    <section>
       <About />
     </section>
+    <Clients />
   </main>
 </template>
 
@@ -47,11 +47,11 @@ section {
 }
 
 .contnr {
-  background: url('/public/imgs/darkbg.jpg') no-repeat center center/cover;
+  background: linear-gradient(#00000000, var(--color-background)),url('/public/imgs/darkbg.jpg') no-repeat center center/cover;
 }
 #logo {
-  width: 550px;
-  height: 550px;
+  width: 400px;
+  height: 400px;
   margin: 0 auto;
   padding: 50px;
   position: sticky;
@@ -101,6 +101,13 @@ section {
 .img-test {
   width: 100%;
   height: 100vh;
+}
+
+@media (max-width: 768px) {
+  #logo {
+    width: 200px;
+    height: 200px;
+  }
 }
 
 </style>

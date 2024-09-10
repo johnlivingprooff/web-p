@@ -1,10 +1,19 @@
+<script>
+import Foot from '@/components/Foot.vue';
+export default {
+  components: {
+    Foot,
+  },
+};
+</script>
+
 <template>
   <div class="container">
     <div class="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/">Projects</router-link>
+      <router-link to="/">#johnlivingprooff</router-link>
     </div>
     <router-view />
+    <Foot />
 </div>
 </template>
 
@@ -12,21 +21,34 @@
 @import './assets/base.css';
 
 .nav {
-  transform-origin: left bottom;
+  transform-origin: bottom left;
   transform: rotate(90deg);
-  width: 50vh;
-  display: flex;
+  width: 100vh;
+  display: grid;
+  place-items: center;
   justify-content: space-between;
   align-items: center;
   align-self: center;
-  padding: 10px;
   position: fixed;
-  margin-top: 150px;
+  margin-top: 40vh;
   z-index: 10000;
 }
 
 .nav a {
   text-decoration: none;
   color: var(--color-link);
+  padding: 5px 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav a:hover {
+  color: var(--color-link-hover);
+  background: #444;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
 }
 </style>

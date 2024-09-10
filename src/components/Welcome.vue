@@ -12,7 +12,7 @@
     data() {
       return {
         originalFontSize: 10, // Original font size
-        maxFontSize: 150, // Maximum font size when scrolling up
+        maxFontSize: 80, // Maximum font size when scrolling up
         fontSize: 10, // Initial font size
         welcomeText: "Welcome", // Initial welcome text
         scrollingDirection: null, // Track scrolling direction: 'up', 'down', or null

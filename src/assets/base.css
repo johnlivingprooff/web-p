@@ -23,6 +23,10 @@
   /* hyperlinks */
   --vt-c-link-white: #ffffff;
   --vt-c-link-black: #000000;
+
+  /* box colors */
+  --vt-box-bg-white: #f9f9f9;
+  --vt-box-bg-black: #181818;
 }
 
 /* semantic color variables for this project */
@@ -38,8 +42,13 @@
   --color-text: var(--vt-c-text-light-1);
 
   --color-link: var(--vt-c-link-black);
+  --color-link2: var(--vt-c-link-white);
 
   --section-gap: 160px;
+
+  --box-color: var(--vt-box-bg-black);
+
+  --color-filter: invert(0);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -55,6 +64,11 @@
     --color-text: var(--vt-c-text-dark-2);
 
     --color-link: var(--vt-c-link-white);
+    --color-link2: var(--vt-c-link-black);
+
+    --box-color: var(--vt-box-bg-white);
+
+    --color-filter: invert(1);
   }
 }
 
@@ -65,6 +79,19 @@
   margin: 0;
   font-weight: normal;
 }
+
+/* Apply this globally to hide scrollbars */
+html, body {
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  width: 0px;  /* Safari and Chrome */
+  background: transparent;  /* Optional: Hide the scrollbar background */
+}
+
 
 body {
   min-height: 100vh;
