@@ -79,7 +79,7 @@ export default {
 }
 
 .animate {
-    animation: stagger-l-r 1s ease forwards;
+    animation: stagger-l-r .5s ease forwards;
     animation-delay: 0.5s;
 }
 
