@@ -51,7 +51,7 @@ section {
 }
 
 .contnr {
-  background: linear-gradient(#00000000, var(--color-background)),url('/public/imgs/darkbg.jpg') no-repeat center center/cover;
+  background: linear-gradient(#00000000, var(--color-background)),url('/imgs/darkbg.jpg') no-repeat center center/cover;
 }
 #logo {
   width: 400px;

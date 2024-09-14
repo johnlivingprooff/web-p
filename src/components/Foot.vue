@@ -41,7 +41,7 @@
     padding: 25px;
     animation: pop 0.97s;
     transition: all 0.3s ease;
-    width: 100px;
+    width: 75px;
     cursor: pointer;
     z-index: 2000;
   }
@@ -54,13 +54,13 @@
     display: flex;
     flex-direction: column;
     position: fixed;
-    bottom: 85px; /* Adjust to your needs */
+    bottom: 55px; /* Adjust to your needs */
     left: 25px; /* Adjust to your needs */
-    gap: 15px;
+    gap: 2px;
   }
   
   .icon {
-    width: 40px;
+    width: 25px;
     height: auto;
     filter: var(--color-filter);
     transition: transform 0.3s;
