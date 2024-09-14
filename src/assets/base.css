@@ -40,6 +40,7 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+  --color-text2: var(--vt-c-text-dark-1);
 
   --color-link: var(--vt-c-link-black);
   --color-link2: var(--vt-c-link-white);
@@ -49,6 +50,8 @@
   --box-color: var(--vt-box-bg-black);
 
   --color-filter: invert(0);
+
+  --color-shadow:rgba(0, 0, 0, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -62,6 +65,7 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+    --color-text2: var(--vt-c-text-light-1);
 
     --color-link: var(--vt-c-link-white);
     --color-link2: var(--vt-c-link-black);
@@ -69,6 +73,8 @@
     --box-color: var(--vt-box-bg-white);
 
     --color-filter: invert(1);
+
+    --color-shadow:rgba(255, 255, 255, 0.1);
   }
 }
 

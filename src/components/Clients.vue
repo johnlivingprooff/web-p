@@ -5,7 +5,7 @@
             <img src="/imgs/clients/07.png" alt="omo-alendo" class="c-icon">
             <img src="/imgs/clients/01.ico" alt="81px" class="c-icon">
             <img src="/imgs/clients/06.png" alt="ajagun" class="c-icon">
-            <img src="/imgs/clients/03.png" alt="event-ease" class="c-icon">
+            <img src="/imgs/clients/cc-logo.png" alt="canaanspeed constructions" class="c-icon">
             <img src="/imgs/clients/04.png" alt="eden-estates-ltd" class="c-icon">
             <img src="/imgs/clients/05.png" alt="oasis-cafe" class="c-icon">
             <img src="/imgs/clients/08.png" alt="ota-connect" class="c-icon">
@@ -79,7 +79,7 @@ export default {
 }
 
 .animate {
-    animation: stagger-l-r 1s ease forwards;
+    animation: stagger-l-r .5s ease forwards;
     animation-delay: 0.5s;
 }
 

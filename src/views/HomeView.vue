@@ -2,9 +2,10 @@
 import Welcome from '@/components/Welcome.vue';
 import About from '@/components/About.vue';
 import Clients from '@/components/Clients.vue';
+import Podcast from '@/components/Podcast.vue';
 export default {
   components: {
-    Welcome, About, Clients
+    Welcome, About, Clients, Podcast
   },
   mounted() {
     const observer = new IntersectionObserver((entries) => {
@@ -34,6 +35,9 @@ export default {
       <About />
     </section>
     <Clients />
+    <section>
+      <Podcast />
+    </section>
   </main>
 </template>
 
@@ -47,7 +51,7 @@ section {
 }
 
 .contnr {
-  background: linear-gradient(#00000000, var(--color-background)),url('/public/imgs/darkbg.jpg') no-repeat center center/cover;
+  background: linear-gradient(#00000000, var(--color-background)),url('/imgs/darkbg.jpg') no-repeat center center/cover;
 }
 #logo {
   width: 400px;

@@ -78,7 +78,7 @@ export default {
 }
 
 .animate {
-  animation: stagger 1s ease forwards;
+  animation: stagger .5s ease forwards;
   animation-delay: 0.5s;
 }
 
@@ -138,7 +138,7 @@ export default {
 }
 
 .intro:hover, .intro2:hover, .intro3:hover {
-  background: radial-gradient(rgba(255, 196, 196, 0.8), var(--box-color));
+  background: radial-gradient(rgba(199, 255, 196, 0.685), var(--box-color));
   scale: 1.03;
   cursor: pointer;
 }
