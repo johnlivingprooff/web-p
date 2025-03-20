@@ -8,7 +8,8 @@
     </div>
     <div class="abt-one intro2">
       <h2>Skill-set & Experience</h2>
-      <p>Some of my Tech-relevant Skills include: <br> <b>ं Digital Marketing, ं Visual Design, ं UI/UX design, ं Fullstack Web Development, ं Software Engineering</b></p>
+      <p>Some of my Tech-relevant Skills include: <br> 
+      <b>Graphic Design <span style="color: cadetblue;">|</span> Digital Marketing <span style="color: cadetblue;">|</span> Web Development <span style="color: cadetblue;">|</span> Photography <span style="color: cadetblue;">|</span> UI/UX Design <span style="color: cadetblue;">|</span> Backend Development <span style="color: cadetblue;">|</span> Software Engineering <span style="color: cadetblue;">|</span> Data Visualization <span style="color: cadetblue;">|</span> Business Reporting Systems <span style="color: cadetblue;">|</span> Branding & Identity Design <span style="color: cadetblue;">|</span> Content Creation <span style="color: cadetblue;">|</span> Technical Problem-Solving <span style="color: cadetblue;">|</span> Creative Strategy</b></p>
       <br>
       <p>I've also collaboratively worked on relevant development projects with peers throughout my learning experience at ALX, where I devoted 1-year to the study of Software Engineering and honed my skills as a developer</p>
     </div>
