@@ -4,12 +4,17 @@
     <div class="abt-one intro">
       <h2>Who Am I?</h2>
       <p>Woven—a blend of fear and love. Writer, designer, creative, innovator. A fusion of creativity and technology.</p><br>
-      <p> I have been passionately developing web and software applications since 2020, honing my skills through both self-learning and formal training. My journey has been significantly shaped by the support and resources from institutions like ALX Africa and Techno Brain, where I've expanded my knowledge in key programming languages & frameworks, including: Python, React.js, Nuxt.js, C, HTML/CSS, JavaScript.</p>
+      <p>
+        Since 2020, I’ve been building web and software solutions—driven by passion and shaped through both self-learning and formal training. With support from institutions like ALX Africa and Techno Brain, I’ve gained fluency in a range of languages and frameworks.
+        <br><br>
+        Now, through <b>81PIXELS</b>, I design clean, purpose-driven digital products for those who value clarity, speed, and real results.
+        Let’s build something that works.
+      </p>
     </div>
     <div class="abt-one intro2">
       <h2>Skill-set & Experience</h2>
       <p>Some of my Tech-relevant Skills include: <br> 
-      <b>Graphic Design <span style="color: cadetblue;">|</span> Digital Marketing <span style="color: cadetblue;">|</span> Web Development <span style="color: cadetblue;">|</span> Photography <span style="color: cadetblue;">|</span> UI/UX Design <span style="color: cadetblue;">|</span> Backend Development <span style="color: cadetblue;">|</span> Software Engineering <span style="color: cadetblue;">|</span> Data Visualization <span style="color: cadetblue;">|</span> Business Reporting Systems <span style="color: cadetblue;">|</span> Branding & Identity Design <span style="color: cadetblue;">|</span> Content Creation <span style="color: cadetblue;">|</span> Technical Problem-Solving <span style="color: cadetblue;">|</span> Creative Strategy</b></p>
+      <b>Graphic Design <span style="color: cadetblue;">|</span> Digital Marketing <span style="color: cadetblue;">|</span> Web Development <span style="color: cadetblue;">|</span> Photography <span style="color: cadetblue;">|</span> UI/UX Design <span style="color: cadetblue;">|</span> Product Design <span style="color: cadetblue;">|</span> Backend Development <span style="color: cadetblue;">|</span> Software Engineering <span style="color: cadetblue;">|</span> Data Visualization <span style="color: cadetblue;">|</span> Business Reporting Systems <span style="color: cadetblue;">|</span> Branding & Identity Design <span style="color: cadetblue;">|</span> Content Creation <span style="color: cadetblue;">|</span> Technical Problem-Solving <span style="color: cadetblue;">|</span> Creative Strategy</b></p>
       <br>
       <p>I've also collaboratively worked on relevant development projects with peers throughout my learning experience at ALX, where I devoted 1-year to the study of Software Engineering and honed my skills as a developer</p>
     </div>
@@ -128,6 +133,11 @@ export default {
 .abt-one a:hover {
   color: var(--color-link-hover);
   text-decoration: underline;
+}
+
+.intro p b {
+  font-weight: 850;
+  color: #635b0d;
 }
 
 .intro, .intro2, .intro3 {
