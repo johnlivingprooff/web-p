@@ -27,7 +27,7 @@
     <div class="card">
       <a href="https://edenestatesmw-v2.vercel.app/" target="_blank">
         <div class="iframe-container">
-          <iframe src="https://edenestatesmw-v2.vercel.app/" frameborder="0"></iframe>
+          <iframe src="https://edenestatesmw.com/" frameborder="0"></iframe>
         </div>
         <div class="card-content">
           <h2>Eden Estate Hotel & Resort</h2>
