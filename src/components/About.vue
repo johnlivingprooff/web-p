@@ -7,7 +7,7 @@
       <p>
         Since 2020, I’ve been building web and software solutions—driven by passion and shaped through both self-learning and formal training. With support from institutions like ALX Africa and Techno Brain, I’ve gained fluency in a range of languages and frameworks.
         <br><br>
-        Now, through <b>81PIXELS</b>, I design clean, purpose-driven digital products for those who value clarity, speed, and real results.
+        Now, through <a href="https://81px.vercel.app/" target="_blank" style="text-decoration: none; color: inherit;"><b>81PIXELS</b></a>, I design clean, purpose-driven digital products for those who value clarity, speed, and real results.
         Let’s build something that works.
       </p>
     </div>
