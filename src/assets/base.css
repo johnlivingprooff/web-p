@@ -98,6 +98,11 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
   background: transparent;  /* Optional: Hide the scrollbar background */
 }
 
+/* Smooth scrolling for in-page anchors like #about */
+html {
+  scroll-behavior: smooth;
+}
+
 
 body {
   min-height: 100vh;

@@ -1,11 +1,11 @@
 <template>
-  <div class="abt-box">
+  <div class="abt-box" id="about">
     <div class="abt-one img-box1"></div>
     <div class="abt-one intro">
       <h2>Who Am I?</h2>
       <p>Woven—a blend of fear and love. Writer, designer, creative, innovator. A fusion of creativity and technology.</p><br>
       <p>
-        Since 2020, I’ve been building web and software solutions—driven by passion and shaped through both self-learning and formal training. With support from institutions like ALX Africa and Techno Brain, I’ve gained fluency in a range of languages and frameworks.
+        Since 2020, I’ve been <b>building web and software solutions</b>—driven by passion and shaped through both <b>self-learning</b> and <b>formal training</b>. With support from institutions like <b>ALX Africa</b> and <b>Techno Brain</b>, I’ve gained fluency in a range of <b>languages and frameworks</b>.
         <br><br>
         Now, through <a href="https://81px.vercel.app/" target="_blank" style="text-decoration: none; color: inherit;"><b>81PIXELS</b></a>, I design clean, purpose-driven digital products for those who value clarity, speed, and real results.
         Let’s build something that works.
@@ -60,6 +60,11 @@ export default {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 20px;
   margin: 95px 200px;
+}
+
+/* Ensure in-page scroll to #about lands with a margin from top */
+#about {
+  scroll-margin-top: 80px;
 }
 
 @keyframes stagger {
@@ -155,15 +160,15 @@ export default {
 }
 
 .img-box1 {
-  background: url('/imgs/who.jpg') no-repeat center center/cover;
+  background: url('/imgs/me.jpg') no-repeat center center/cover;
 }
 
 .img-box2 {
-  background: url('/imgs/skills.jpg') no-repeat center center/cover;
+  background: url('/imgs/who.jpg') no-repeat center center/cover;
 }
 
 .img-box3 {
-  background: url('/imgs/where-fear-becomes-love.png') no-repeat center center/cover;
+  background: url('/imgs/darkbg1.jpg') no-repeat center center/cover;
 }
 
 .img-box1:hover, .img-box2:hover, .img-box3:hover {

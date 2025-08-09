@@ -2,7 +2,7 @@
     <div>
       <span class="wel fade-l">
         <h2 :style="{ fontSize: fontSize + 'px' }" :class="textFadeClass">{{ welcomeText }}</h2>
-        <p>- #iWFBL -<br><br>&darr;</p>
+  <p>- #iWFBL -<br><br><a href="#about" @click.prevent="scrollToAbout" aria-label="Scroll to About">&darr;</a></p>
       </span>
     </div>
   </template>
@@ -62,6 +62,14 @@
         };
   
         setInterval(changeText, 1200); // Adjust interval as needed for text changes
+      },
+      scrollToAbout() {
+        const target = document.getElementById('about');
+        if (target && typeof target.scrollIntoView === 'function') {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (target) {
+          window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+        }
       }
     }
   };
@@ -96,6 +104,11 @@
   .wel p {
     font-size: 1.5rem;
     margin-top: 20px;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
   }
 
   
