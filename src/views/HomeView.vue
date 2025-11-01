@@ -28,7 +28,7 @@ export default {
 <template>
   <main>
     <section class="hidden contnr">
-      <img src="/logo.png" alt="logo-house" id="logo" class="scroll-logo">
+      <img src="/icon.png" alt="logo-house" id="logo" class="scroll-logo">
       <Welcome />
     </section>
     <section>
