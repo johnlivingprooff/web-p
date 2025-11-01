@@ -10,7 +10,7 @@ export default {
 <template>
   <div class="container">
     <div class="nav">
-      <router-link to="/">#johnlivingprooff</router-link>
+      <router-link to="/projects">Projects</router-link>
     </div>
     <router-view />
     <Foot />

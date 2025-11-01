@@ -21,7 +21,7 @@
     <div class="abt-one img-box2"></div>
     <div class="abt-one img-box3"></div>
     <div class="abt-one intro3">
-      <h2>My Works</h2>
+      <h2>My Work</h2>
       <p>Enough about me 😅, Here's some of the projects I've worked on!</p><br>
       <a href="https://github.com/johnlivingprooff?tab=repositories">github/johnlivingprooff</a> &nbsp;|&nbsp;
       <router-link to="/projects">Live Projects</router-link>

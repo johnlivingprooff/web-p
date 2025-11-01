@@ -3,7 +3,7 @@
         <h2>Some of My Clients:</h2>
         <div class="c-icons">
             <img src="/imgs/clients/07.png" alt="omo-alendo" class="c-icon">
-            <img src="/imgs/clients/01.ico" alt="81px" class="c-icon">
+            <img src="/imgs/clients/eiteone.png" alt="81px" class="c-icon">
             <img src="/imgs/clients/06.png" alt="ajagun" class="c-icon">
             <img src="/imgs/clients/cc-logo.png" alt="canaanspeed constructions" class="c-icon">
             <img src="/imgs/clients/04.png" alt="eden-estates-ltd" class="c-icon">
