@@ -1,8 +1,8 @@
 <script>
-import Foot from '@/components/Foot.vue';
+import Footer from '@/components/Footer.vue';
 export default {
   components: {
-    Foot,
+    Footer,
   },
 };
 </script>
@@ -10,10 +10,11 @@ export default {
 <template>
   <div class="container">
     <div class="nav">
-      <router-link to="/projects">Projects</router-link>
+      <router-link v-if="$route.path === '/projects' || $route.path.startsWith('/projects/')" to="/">#johnlivingprooff</router-link>
+      <router-link v-else to="/projects">Projects</router-link>
     </div>
     <router-view />
-    <Foot />
+    <Footer />
 </div>
 </template>
 

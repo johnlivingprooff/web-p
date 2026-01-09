@@ -1,23 +1,30 @@
 <template>
   <div class="project-view">
-    <h1>Projects</h1>
-    <p>Here are some of the web projects I've worked on.</p>
+    <div class="glass-header hidden">
+      <p class="tagline">Explore live projects in an interactive node. Switch to grid, and open details without leaving the page.</p>
+    </div>
     <section class="projects">
-      <ProjectBox />
+      <ProjectGalaxy :selectedId="$route.params.id || null" />
     </section>
     <br>
-    <div id="cntct">
-      <img src="/imgs/contct.png" alt="let's work together">
-    </div>
   </div>
 </template>
 
 <script>
-import Foot from '@/components/Foot.vue';
-import ProjectBox from '@/components/ProjectsBox.vue';
+import ProjectGalaxy from '@/components/ProjectGalaxy.vue';
 
 export default {
-  components: { ProjectBox, Foot },
+  components: { ProjectGalaxy },
+  mounted() {
+    const el = this.$el.querySelector('.glass-header');
+    if (!el) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) el.classList.add('show');
+      });
+    }, { threshold: 0.8 });
+    observer.observe(el);
+  }
 }
 </script>
 
@@ -27,21 +34,34 @@ export default {
     place-items: center;
     font-family: 'Raleway', sans-serif;
     color: var(--color-text);
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 1000;
-      margin-bottom: 10px;
-      margin-top: 55px;
-    }
-    p {
-      margin-bottom: 15px;
-    }
+    p { margin-bottom: 15px; }
   }
 
-  .projects {
-    /* background-color: aliceblue; */
-    width: 90%;
-    margin-bottom: 25px;
+  .glass-header {
+    position: sticky;
+    top: 10px;
+    z-index: 5;
+    margin: 12px auto 16px;
+    width: min(960px, 90%);
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: transparent;
+    box-shadow: none;
+    position: sticky;
+    overflow: hidden;
+    text-align: center;
+  }
+  .glass-header .tagline { margin: 0; }
+  /* Removed blurred/overlay background */
+
+  .projects { width: 90%; margin-bottom: 25px; }
+
+  /* Fade-in on first reveal */
+  .hidden { opacity: 0; transform: translateY(-4px); }
+  .show { animation: fadeSlideIn .6s ease-out forwards; }
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   hr {

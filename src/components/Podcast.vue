@@ -21,7 +21,7 @@
     </div>
     <div class="pod-links">
         <a class="btn-s" href="https://open.spotify.com/show/2VgMTD1eFU6R66XkZtRqEJ?si=1f822ae349914e5f" target="_blank"><img src="/imgs/spotify-icon.png" width="12px"/> Listen on Spotify</a>
-        <a class="btn-s" href="https://bit.ly/thejohnlivingproofpodcast" target="_blank">Visit Website</a>
+        <a class="btn-s" href="https://pod.eiteone.org/" target="_blank">Visit Website</a>
     </div>
     </div>
   </template>

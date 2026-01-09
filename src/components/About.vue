@@ -48,6 +48,18 @@ export default {
 
     const selectedElements = document.querySelectorAll('.abt-one');
     selectedElements.forEach((el) => observer.observe(el));
+
+    // Track cursor position on hover cards
+    const hoverCards = document.querySelectorAll('.intro, .intro2, .intro3');
+    hoverCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
   },
 };
 </script>
@@ -150,11 +162,14 @@ export default {
   color: #333;
   border: none;
   padding: 50px;
-  transition: all .3s ease;
+  transition: scale .3s ease;
+  position: relative;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
 }
 
 .intro:hover, .intro2:hover, .intro3:hover {
-  background: radial-gradient(rgba(199, 255, 196, 0.685), var(--box-color));
+  background: radial-gradient(circle 200px at var(--mouse-x) var(--mouse-y), rgba(199, 255, 196, 0.685), var(--box-color));
   scale: 1.03;
   cursor: pointer;
 }

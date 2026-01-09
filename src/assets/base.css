@@ -130,3 +130,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Custom cursor for desktop */
+@media (min-width: 769px) {
+  body, body * {
+    cursor: url('/main-1.png'), auto !important;
+  }
+}

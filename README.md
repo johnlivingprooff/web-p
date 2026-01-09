@@ -28,6 +28,17 @@ npm run dev
 npm run build
 ```
 
+### Projects Galaxy (Interactive)
+
+Explore live projects via an interactive galaxy UI on the Projects route.
+
+- Open: navigate to `/projects`
+- Deep-link to a project: `/projects/<id>` (e.g. `/projects/habicore-pos`)
+- Filter: use the tag chips and search box
+- Toggle: switch between Galaxy and Grid views
+
+Note: Unit tests in the template may reference non-existent demo components. Run `npm run build` to verify compilation instead.
+
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh

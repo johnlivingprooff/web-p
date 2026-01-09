@@ -34,7 +34,7 @@ export default {
           desc: 'Click To View the Website'
         },
         {
-          title: 'Eeden Estate Hotel & Resort',
+          title: 'Eden Estate Hotel & Resort',
           href: 'https://edenestatesmw-v2.vercel.app/',
           image: '/imgs/clients/04.png',
           desc: 'Click To View the Website'
