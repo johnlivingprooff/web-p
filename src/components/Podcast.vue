@@ -10,11 +10,13 @@
             :style="{ animationDelay: `${index * 0.2}s` }"
             class="stagger-item pod-item">
           <img v-if="item.image" :src="item.image" :alt="item.title" />
-          <h3>{{ item.title }}</h3>
-          <audio :src="item.audio" controls></audio>
-          <p><b>Published:</b> {{ item.pubDate }}</p>
-          <!-- <p v-html="item.description"></p> -->
-          <a :href="item.link" target="_blank"><img src="/imgs/spotify-icon.png" width="15px"/> Listen on Spotify</a>
+          <div class="pod-body">
+            <h3>{{ item.title }}</h3>
+            <audio :src="item.audio" controls></audio>
+            <p><b>Published:</b> {{ item.pubDate }}</p>
+            <!-- <p v-html="item.description"></p> -->
+            <a :href="item.link" target="_blank"><img src="/imgs/spotify-icon.png" width="15px"/> Listen on Spotify</a>
+          </div>
         </li>
       </ul>
 
@@ -202,6 +204,9 @@
   grid-column: span 1;
   transform: translateX(-50px);
   opacity: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
 }
 
 .stagger-item {
@@ -254,6 +259,20 @@
     font-weight: 600;
 }
 
+.pod-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.pod-body {
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  gap: 10px;
+}
+
 .pod-item audio {
     width: 100%;
     margin-bottom: 10px;
@@ -289,6 +308,21 @@
     }
     .pod-item {
         grid-column: span 1;
+    transform: none;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+  .pod-item img {
+      height: 210px;
+      border-radius: 0;
+      box-shadow: none;
+  }
+
+    .pod-body {
+      padding: 16px;
+      background: var(--box-color);
     }
 }
 

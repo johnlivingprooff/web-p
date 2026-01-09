@@ -23,8 +23,10 @@
     <div class="abt-one intro3">
       <h2>My Work</h2>
       <p>Enough about me 😅, Here's some of the projects I've worked on!</p><br>
-      <a href="https://github.com/johnlivingprooff?tab=repositories">github/johnlivingprooff</a> &nbsp;|&nbsp;
-      <router-link to="/projects">Live Projects</router-link>
+      <div class="cta-row">
+        <a class="cta" href="https://github.com/johnlivingprooff?tab=repositories">github/johnlivingprooff</a>
+        <router-link class="cta" to="/projects">Live Projects</router-link>
+      </div>
       <br><br><p>
         Looking ahead, I aim to specialize in AI-driven development and play a part in innovative projects that push the boundaries of what's possible in tech. I am also passionate about contributing to open-source communities.
       </p>
@@ -192,14 +194,42 @@ export default {
   perspective: 1000px 500px;
 }
 
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: var(--color-link2);
+  text-decoration: none;
+  font-weight: 700;
+  background: linear-gradient(120deg, rgba(255, 215, 0, 0.16), rgba(255, 255, 255, 0.04));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+  color: var(--color-link-hover);
+}
+
 @media (max-width: 768px) {
   .abt-box {
     grid-template-columns: 1fr;
-    margin: 50px;
+    margin: 32px 18px;
   }
 
   .abt-one {
-    margin: 10px;
+    margin: 8px;
+    padding: 22px;
   }
 
   .abt-one h2 {
@@ -208,11 +238,52 @@ export default {
   }
 
   .abt-one p {
-    font-size: .85rem;
+    font-size: .9rem;
   }
 
-  .img-box1, .img-box2, .img-box3 {
+  .img-box1 {
+    display: block;
+    min-height: 220px;
+    border-radius: 14px 14px 0 0;
+    box-shadow: none;
+    margin-bottom: 0;
+  }
+
+  .img-box2, .img-box3 {
     display: none;
+  }
+
+  .intro {
+    padding: 26px;
+    background: var(--box-color);
+    scale: 1;
+    border-radius: 0 0 14px 14px;
+    margin-top: 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  .intro2, .intro3 {
+    padding: 26px;
+    background: var(--box-color);
+    scale: 1;
+    border-radius: 14px;
+    margin-top: 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  .intro:hover, .intro2:hover, .intro3:hover {
+    background: var(--box-color);
+    scale: 1;
+  }
+
+  .cta-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>

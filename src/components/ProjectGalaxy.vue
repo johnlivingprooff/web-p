@@ -164,6 +164,9 @@ export default {
     }
   },
   mounted() {
+    if (typeof window !== 'undefined' && window.innerWidth <= 900) {
+      this.view = 'grid';
+    }
     if (this.selectedId) {
       const found = this.items.find(p => p.id === this.selectedId);
       if (found) { this.open(found); }
@@ -255,14 +258,14 @@ export default {
 .filters-actions { display: flex; justify-content: space-between; align-items: center; padding: 6px; }
 .filters-actions .link { background: transparent; border: none; color: gold; cursor: pointer; }
 .filters-actions .apply { border: 1px solid gold; background: gold; color: #222; padding: 6px 10px; border-radius: 8px; }
- .toggle-bar { position: fixed; top: 50px; right: 50px; z-index: 50; }
- .view-toggle { display: flex; gap: 8px; }
+.toggle-bar { position: fixed; top: 50px; right: 50px; z-index: 50; display: flex; justify-content: flex-end; }
+.view-toggle { display: flex; gap: 8px; background: rgba(0,0,0,0.25); padding: 6px; border-radius: 12px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
  .view-toggle button { padding: 8px 14px; border: 1px solid gold; background: rgba(0,0,0,0.25); color: gold; border-radius: 10px; }
 .view-toggle .active { background: gold; color: #222; font-weight: 700; }
 
 
 /* Static crime-board style */
-.board { position: relative; min-height: 720px; }
+.board { position: relative; min-height: 640px; }
 .lines { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
 .line { stroke: rgba(255,215,0,0.6); stroke-width: 1.2; }
 .glass-circle { position: absolute; transform: translate(-50%, -50%); border-radius: 50%; z-index: 2; background: rgba(20,20,20,0.25); -webkit-backdrop-filter: blur(8px) saturate(120%); backdrop-filter: blur(8px) saturate(120%); border: 1px solid rgba(255,215,0,0.35); box-shadow: inset 0 8px 24px rgba(0,0,0,0.25); }
@@ -311,5 +314,40 @@ export default {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1) rotate(0deg);
   }
+}
+
+@media (max-width: 900px) {
+  .toggle-bar {
+    position: sticky;
+    top: 66px;
+    right: 0;
+    width: 100%;
+    justify-content: center;
+    padding: 6px 10px;
+  }
+
+  .view-toggle {
+    gap: 6px;
+    width: min(420px, 100%);
+    justify-content: center;
+  }
+
+  .view-toggle button {
+    flex: 1;
+    font-weight: 600;
+  }
+
+  .board {
+    min-height: 520px;
+    margin-top: 12px;
+  }
+
+  .dot .tooltip { display: none; }
+}
+
+@media (max-width: 640px) {
+  .galaxy { gap: 10px; }
+  .card { border-radius: 12px; }
+  .image { height: 190px; }
 }
 </style>

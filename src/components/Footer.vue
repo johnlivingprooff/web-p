@@ -24,12 +24,14 @@ export default {
   border-top: 1px solid rgba(255, 215, 0, 0.5); /* pale gold */
   background: var(--color-background);
   color: var(--color-text);
+  padding: 12px 0;
 }
 .inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
   min-height: 50px; /* ensure a touch-friendly hit area */
+  gap: 10px;
 }
 .left { padding-left: 50px; }
 .right { padding-right: 50px; }
@@ -37,7 +39,8 @@ export default {
 .right a:hover { color: var(--color-link-hover); text-decoration: underline; }
 
 @media (max-width: 640px) {
-  .inner { flex-direction: column; gap: 6px; padding: 8px 0; }
+  .inner { flex-direction: column; gap: 6px; padding: 10px 0; text-align: center; }
   .left, .right { padding: 0 16px; }
+  .right a { display: inline-flex; }
 }
 </style>

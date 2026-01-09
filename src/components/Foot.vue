@@ -82,5 +82,24 @@
   #chat:hover {
     scale: 1.1;
   }
+
+  @media (max-width: 720px) {
+    #chat {
+      width: 58px;
+      padding: 18px;
+      left: 10px;
+      bottom: 6px;
+    }
+
+    .icons {
+      bottom: 72px;
+      left: 16px;
+      gap: 6px;
+    }
+
+    .icon {
+      width: 28px;
+    }
+  }
   </style>
   
