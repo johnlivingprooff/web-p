@@ -3,115 +3,63 @@ import Welcome from '@/components/Welcome.vue';
 import About from '@/components/About.vue';
 import Clients from '@/components/Clients.vue';
 import Podcast from '@/components/Podcast.vue';
-export default {
-  components: {
-    Welcome, About, Clients, Podcast
-  },
-  mounted() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-        } else {
-          entry.target.classList.remove('show');
-        }
-      });
-    },  { threshold: 0.1 });
 
-    const hiddenElements = document.querySelectorAll('.hidden');
-    hiddenElements.forEach((el) => observer.observe(el));
-  },
+export default {
+  components: { Welcome, About, Clients, Podcast },
 };
 </script>
 
-
 <template>
   <main>
-    <section class="hidden contnr">
-      <img src="/icon.png" alt="logo-house" id="logo" class="scroll-logo">
+    <!-- Hero: dark bg + logo + welcome text (kept as-is) -->
+    <section class="hero">
+      <img src="/icon.png" alt="logo" class="hero__logo" />
       <Welcome />
     </section>
-    <section>
+
+    <!-- Remaining sections on light background -->
+    <div class="content">
       <About />
-    </section>
-    <Clients />
-    <section>
+      <Clients />
       <Podcast />
-    </section>
+    </div>
   </main>
 </template>
 
 <style scoped>
-section {
+/* Hero section — unchanged from original */
+.hero {
   display: grid;
   place-items: center;
   align-content: center;
-  overflow: hidden;
   min-height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(#00000000, var(--c-black, #0a0a0a)),
+              url('/imgs/darkbg.jpg') no-repeat center center / cover;
+  animation: heroFade 1s ease forwards;
 }
 
-.contnr {
-  background: linear-gradient(#00000000, var(--color-background)),url('/imgs/darkbg.jpg') no-repeat center center/cover;
+@keyframes heroFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-#logo {
-  width: 400px;
-  height: 400px;
-  margin: 0 auto;
-  padding: 50px;
-  position: sticky;
+
+.hero__logo {
+  width: clamp(180px, 30vw, 400px);
+  height: clamp(180px, 30vw, 400px);
   display: block;
+  margin: 0 auto;
+  padding: 40px;
+  animation: logoPop 0.8s ease forwards;
 }
 
-.hidden {
-  opacity: 0;
-  transition: all 3s;
+@keyframes logoPop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Content wrapper — light background for all other sections */
+.content {
+  background: var(--color-background, #f5f4f0);
 }
-
-.show {
-  animation: fadeIn 1s forwards;
-}
-
-@keyframes pop {
-  0% {
-    transform: scale(0.3);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.sticky {
-  position: sticky;
-}
-
-.scroll-logo {
-  animation: pop .8s forwards;
-}
-
-.scroll-logo.sticky {
-  transform: scale(0.8); /* Optional: scale down the logo when sticky */
-  opacity: 0.9;
-}
-
-.img-test {
-  width: 100%;
-  height: 100vh;
-}
-
-@media (max-width: 768px) {
-  #logo {
-    width: 200px;
-    height: 200px;
-  }
-}
-
 </style>

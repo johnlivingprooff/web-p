@@ -1,289 +1,327 @@
 <template>
-  <div class="abt-box" id="about">
-    <div class="abt-one img-box1"></div>
-    <div class="abt-one intro">
-      <h2>Who Am I?</h2>
-      <p>Woven—a blend of fear and love. Writer, designer, creative, innovator. A fusion of creativity and technology.</p><br>
-      <p>
-        Since 2020, I’ve been <b>building web and software solutions</b>—driven by passion and shaped through both <b>self-learning</b> and <b>formal training</b>. With support from institutions like <b>ALX Africa</b> and <b>Techno Brain</b>, I’ve gained fluency in a range of <b>languages and frameworks</b>.
-        <br><br>
-        Now, through <a href="https://81px.vercel.app/" target="_blank" style="text-decoration: none; color: inherit;"><b>81PIXELS</b></a>, I design clean, purpose-driven digital products for those who value clarity, speed, and real results.
-        Let’s build something that works.
-      </p>
+  <section class="about" id="about">
+    <!-- Section label -->
+    <div class="about__label">
+      <span>01 — About</span>
     </div>
-    <div class="abt-one intro2">
-      <h2>Skill-set & Experience</h2>
-      <p>Some of my Tech-relevant Skills include: <br> 
-      <b>Graphic Design <span style="color: cadetblue;">|</span> Digital Marketing <span style="color: cadetblue;">|</span> Web Development <span style="color: cadetblue;">|</span> Photography <span style="color: cadetblue;">|</span> UI/UX Design <span style="color: cadetblue;">|</span> Product Design <span style="color: cadetblue;">|</span> Backend Development <span style="color: cadetblue;">|</span> Software Engineering <span style="color: cadetblue;">|</span> Data Visualization <span style="color: cadetblue;">|</span> Business Reporting Systems <span style="color: cadetblue;">|</span> Branding & Identity Design <span style="color: cadetblue;">|</span> Content Creation <span style="color: cadetblue;">|</span> Technical Problem-Solving <span style="color: cadetblue;">|</span> Creative Strategy</b></p>
-      <br>
-      <p>I've also collaboratively worked on relevant development projects with peers throughout my learning experience at ALX, where I devoted 1-year to the study of Software Engineering and honed my skills as a developer</p>
-    </div>
-    <div class="abt-one img-box2"></div>
-    <div class="abt-one img-box3"></div>
-    <div class="abt-one intro3">
-      <h2>My Work</h2>
-      <p>Enough about me 😅, Here's some of the projects I've worked on!</p><br>
-      <div class="cta-row">
-        <a class="cta" href="https://github.com/johnlivingprooff?tab=repositories">github/johnlivingprooff</a>
-        <router-link class="cta" to="/projects">Live Projects</router-link>
+
+    <!-- Intro block -->
+    <div class="about__intro reveal">
+      <div class="about__intro-text">
+        <h2 class="about__headline">
+          Woven—a blend<br>of fear and love.
+        </h2>
+        <p class="about__sub">
+          Writer, designer, creative, innovator. A fusion of creativity and technology.
+        </p>
       </div>
-      <br><br><p>
-        Looking ahead, I aim to specialize in AI-driven development and play a part in innovative projects that push the boundaries of what's possible in tech. I am also passionate about contributing to open-source communities.
-      </p>
+      <div class="about__intro-img">
+        <img src="/imgs/me.jpg" alt="John" />
+      </div>
     </div>
-  </div>
-  <br><br><br>
+
+    <!-- Bio block -->
+    <div class="about__bio reveal">
+      <div class="about__bio-col">
+        <h3>Background</h3>
+        <p>
+          Since 2020, I've been <strong>building web and software solutions</strong>—driven by passion and shaped through both <strong>self-learning</strong> and <strong>formal training</strong>. With support from institutions like <strong>ALX Africa</strong> and <strong>Techno Brain</strong>, I've gained fluency in a range of languages and frameworks.
+        </p>
+        <p>
+          Now, through <a href="https://81px.vercel.app/" target="_blank">81PIXELS</a>, I design clean, purpose-driven digital products for those who value clarity, speed, and real results.
+        </p>
+      </div>
+      <div class="about__bio-col">
+        <h3>Skills</h3>
+        <ul class="about__skills">
+          <li>Graphic Design</li>
+          <li>Web Development</li>
+          <li>UI/UX Design</li>
+          <li>Product Design</li>
+          <li>Backend Development</li>
+          <li>Software Engineering</li>
+          <li>Digital Marketing</li>
+          <li>Photography</li>
+          <li>Data Visualization</li>
+          <li>Branding & Identity</li>
+          <li>Content Creation</li>
+          <li>Creative Strategy</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Work CTA block -->
+    <div class="about__work reveal">
+      <div class="about__work-img">
+        <img src="/imgs/skills.jpg" alt="Work" />
+      </div>
+      <div class="about__work-text">
+        <h3>My Work</h3>
+        <p>
+          I've collaboratively worked on relevant development projects throughout my learning experience at ALX, where I devoted 1 year to Software Engineering. Looking ahead, I aim to specialize in AI-driven development and contribute to open-source communities.
+        </p>
+        <div class="about__cta-row">
+          <a class="about__cta" href="https://github.com/johnlivingprooff?tab=repositories" target="_blank">
+            <span>GitHub</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <router-link class="about__cta about__cta--outline" to="/projects">
+            <span>Live Projects</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </router-link>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
 export default {
   mounted() {
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate');
-        } else {
-          entry.target.classList.remove('animate');
-        }
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('revealed');
       });
-    },  { threshold: 0.1 });
+    }, { threshold: 0.12 });
 
-    const selectedElements = document.querySelectorAll('.abt-one');
-    selectedElements.forEach((el) => observer.observe(el));
-
-    // Track cursor position on hover cards
-    const hoverCards = document.querySelectorAll('.intro, .intro2, .intro3');
-    hoverCards.forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-      });
-    });
-  },
+    document.querySelectorAll('.about .reveal').forEach(el => observer.observe(el));
+  }
 };
 </script>
 
 <style scoped>
-@import '@/assets/base.css';
 
-.abt-box {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 20px;
-  margin: 95px 200px;
-}
-
-/* Ensure in-page scroll to #about lands with a margin from top */
-#about {
+.about {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px clamp(20px, 5vw, 80px) 80px;
   scroll-margin-top: 80px;
 }
 
-@keyframes stagger {
-  from {
-    opacity: 0;
-    transform: translateY(250px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.about__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #888);
+  margin-bottom: 60px;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
-.abt-one {
-  padding: 20px;
-  border-radius: 10px;
-  font-family: 'Raleway', sans-serif;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 25px;
-  opacity: 0;
-  transition: all 0.3s ease;
+/* Intro */
+.about__intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: end;
+  margin-bottom: 100px;
 }
 
-.animate {
-  animation: stagger .5s ease forwards;
-  animation-delay: 0.5s;
-}
-
-.abt-one:nth-child(1) {
-  animation-delay: 0.2s;
-}
-
-.abt-one:nth-child(2) {
-  animation-delay: 0.4s;
-}
-
-.abt-one:nth-child(3) {
-  animation-delay: 0.6s;
-}
-
-.abt-one:nth-child(4) {
-  animation-delay: 0.8s;
-}
-
-.abt-one:nth-child(5) {
-  animation-delay: 1s;
-}
-
-.abt-one:nth-child(6) {
-  animation-delay: 1.2s;
-}
-
-.abt-one h2 {
-  font-size: 4.5rem;
+.about__headline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
   font-weight: 700;
-  color: #333;
-  line-height: 75px;
-  margin-bottom: 25px;
+  line-height: 1.05;
+  color: var(--color-heading, #0a0a0a);
+  margin-bottom: 24px;
 }
 
-.abt-one p {
-  font-size: .95rem;
-  color: #333;
+.about__sub {
+  font-size: 1.1rem;
+  color: var(--color-text-muted, #666);
+  max-width: 420px;
+  line-height: 1.7;
 }
 
-.abt-one a {
-  color: var(--color-link2);
-  text-decoration: none;
-}
-
-.abt-one a:hover {
-  color: var(--color-link-hover);
-  text-decoration: underline;
-}
-
-.intro p b {
-  font-weight: 850;
-  color: #635b0d;
-}
-
-.intro, .intro2, .intro3 {
-  background: var(--box-color);
-  color: #333;
-  border: none;
-  padding: 50px;
-  transition: scale .3s ease;
+.about__intro-img {
   position: relative;
-  --mouse-x: 50%;
-  --mouse-y: 50%;
 }
 
-.intro:hover, .intro2:hover, .intro3:hover {
-  background: radial-gradient(circle 200px at var(--mouse-x) var(--mouse-y), rgba(199, 255, 196, 0.685), var(--box-color));
-  scale: 1.03;
-  cursor: pointer;
+.about__intro-img img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
 }
 
-.img-box1 {
-  background: url('/imgs/me.jpg') no-repeat center center/cover;
+/* Bio */
+.about__bio {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  padding: 60px 0;
+  border-top: 1px solid var(--color-border, rgba(0,0,0,0.08));
+  border-bottom: 1px solid var(--color-border, rgba(0,0,0,0.08));
+  margin-bottom: 100px;
 }
 
-.img-box2 {
-  background: url('/imgs/who.jpg') no-repeat center center/cover;
+.about__bio-col h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #888);
+  margin-bottom: 24px;
 }
 
-.img-box3 {
-  background: url('/imgs/darkbg1.jpg') no-repeat center center/cover;
+.about__bio-col p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--color-text, #111);
+  margin-bottom: 16px;
 }
 
-.img-box1:hover, .img-box2:hover, .img-box3:hover {
-  scale: 1.03; 
-  cursor: pointer;
-  perspective: 1000px 500px;
+.about__bio-col p strong {
+  color: var(--color-heading, #0a0a0a);
+  font-weight: 600;
 }
 
-.cta-row {
+.about__bio-col a {
+  color: var(--color-heading, #0a0a0a);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.about__skills {
+  list-style: none;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
+}
+
+.about__skills li {
+  font-size: 0.8rem;
+  padding: 6px 14px;
+  border: 1px solid var(--color-border, rgba(0,0,0,0.12));
+  border-radius: 999px;
+  color: var(--color-text, #111);
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.about__skills li:hover {
+  background: var(--c-accent, #c8f542);
+  border-color: var(--c-accent, #c8f542);
+  color: #0a0a0a;
+}
+
+/* Work */
+.about__work {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
   align-items: center;
 }
 
-.cta {
+.about__work-img img {
+  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+.about__work-text h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 700;
+  color: var(--color-heading, #0a0a0a);
+  margin-bottom: 20px;
+}
+
+.about__work-text p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--color-text, #111);
+  margin-bottom: 32px;
+}
+
+.about__cta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.about__cta {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 215, 0, 0.4);
-  color: var(--color-link2);
+  gap: 8px;
+  padding: 12px 24px;
+  background: #f5f4f0;
+  color:#0a0a0a;
+  border-radius: 4px;
   text-decoration: none;
-  font-weight: 700;
-  background: linear-gradient(120deg, rgba(255, 215, 0, 0.16), rgba(255, 255, 255, 0.04));
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, transform 0.2s;
 }
 
-.cta:hover {
+.about__cta:hover {
+  background: var(--c-accent, #c8f542);
+  color: #0a0a0a;
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
-  color: var(--color-link-hover);
 }
 
+.about__cta--outline {
+  background: transparent;
+  color: var(--color-heading, #0a0a0a);
+  border: 1px solid var(--color-border, rgba(0,0,0,0.2));
+}
+
+.about__cta--outline:hover {
+  background: var(--c-accent, #c8f542);
+  border-color: var(--c-accent, #c8f542);
+  color: #0a0a0a;
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile */
 @media (max-width: 768px) {
-  .abt-box {
+  .about {
+    padding: 60px 20px 60px;
+  }
+
+  .about__intro,
+  .about__bio,
+  .about__work {
     grid-template-columns: 1fr;
-    margin: 32px 18px;
+    gap: 32px;
   }
 
-  .abt-one {
-    margin: 8px;
-    padding: 22px;
+  .about__intro {
+    margin-bottom: 60px;
   }
 
-  .abt-one h2 {
-    font-size: 2.5rem;
-    line-height: 50px;
+  .about__intro-img {
+    order: -1;
   }
 
-  .abt-one p {
-    font-size: .9rem;
+  .about__intro-img img {
+    aspect-ratio: 3/2;
   }
 
-  .img-box1 {
-    display: block;
-    min-height: 220px;
-    border-radius: 14px 14px 0 0;
-    box-shadow: none;
-    margin-bottom: 0;
+  .about__bio {
+    margin-bottom: 60px;
   }
 
-  .img-box2, .img-box3 {
-    display: none;
-  }
-
-  .intro {
-    padding: 26px;
-    background: var(--box-color);
-    scale: 1;
-    border-radius: 0 0 14px 14px;
-    margin-top: 0;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  }
-
-  .intro2, .intro3 {
-    padding: 26px;
-    background: var(--box-color);
-    scale: 1;
-    border-radius: 14px;
-    margin-top: 0;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  }
-
-  .intro:hover, .intro2:hover, .intro3:hover {
-    background: var(--box-color);
-    scale: 1;
-  }
-
-  .cta-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .cta {
-    width: 100%;
-    justify-content: center;
+  .about__work-img {
+    order: -1;
   }
 }
 </style>

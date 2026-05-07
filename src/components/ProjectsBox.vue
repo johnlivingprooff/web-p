@@ -83,7 +83,7 @@ export default {
   gap: 30px;
   padding: 20px;
   place-items: stretch;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   color: var(--color-text);
 }
 

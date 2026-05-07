@@ -76,10 +76,9 @@
   </script>
   
   <style scoped>
-  @import url('https://fonts.googleapis.com/css2?family=Ojuju:wght@200..800&display=swap');
   
   .wel {
-    font-family: "Ojuju", sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 300;
     text-align: center;
     margin-top: 20px;

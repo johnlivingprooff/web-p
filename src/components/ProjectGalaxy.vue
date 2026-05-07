@@ -31,6 +31,7 @@
       </div>
     </div>
 
+
     <div v-if="view==='galaxy'" class="board" ref="boardRef">
       <svg class="lines" :width="container.w" :height="container.h" :viewBox="`0 0 ${container.w} ${container.h}`" aria-hidden="true">
         <line
@@ -83,12 +84,15 @@
     </div>
 
     <div v-else class="grid">
-      <div v-for="proj in filtered" :key="proj.id" class="card" @click="open(proj)">
-        <div class="image"><img :src="proj.image" :alt="proj.title" @error="onImgError" /></div>
-        <div class="content">
-          <h3>{{ proj.title }}</h3>
-          <p>{{ proj.summary }}</p>
-          <div class="mini-tags"><span v-for="t in proj.tags" :key="t">{{ toSentenceCase(t) }}</span></div>
+      <div v-for="proj in filtered" :key="proj.id" class="card" @click="open(proj)" role="button" tabindex="0" @keydown.enter="open(proj)">
+        <div class="card__image"><img :src="proj.image" :alt="proj.title" @error="onImgError" /></div>
+        <div class="card__content">
+          <div class="card__meta">
+            <span class="card__status" :data-state="proj.status">{{ proj.status }}</span>
+          </div>
+          <h3 class="card__title">{{ proj.title }}</h3>
+          <p class="card__summary">{{ proj.summary }}</p>
+          <div class="card__tags"><span v-for="t in proj.tags" :key="t">{{ toSentenceCase(t) }}</span></div>
         </div>
       </div>
     </div>
@@ -258,10 +262,10 @@ export default {
 .filters-actions { display: flex; justify-content: space-between; align-items: center; padding: 6px; }
 .filters-actions .link { background: transparent; border: none; color: gold; cursor: pointer; }
 .filters-actions .apply { border: 1px solid gold; background: gold; color: #222; padding: 6px 10px; border-radius: 8px; }
-.toggle-bar { position: fixed; top: 50px; right: 50px; z-index: 50; display: flex; justify-content: flex-end; }
-.view-toggle { display: flex; gap: 8px; background: rgba(0,0,0,0.25); padding: 6px; border-radius: 12px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
- .view-toggle button { padding: 8px 14px; border: 1px solid gold; background: rgba(0,0,0,0.25); color: gold; border-radius: 10px; }
-.view-toggle .active { background: gold; color: #222; font-weight: 700; }
+.toggle-bar { display: flex; justify-content: flex-end; margin-bottom: 24px; }
+.view-toggle { display: flex; gap: 4px; background: var(--color-surface, #fff); padding: 4px; border-radius: 8px; border: 1px solid var(--color-border, rgba(0,0,0,0.08)); box-shadow: 0 2px 8px var(--color-shadow, rgba(0,0,0,0.06)); }
+.view-toggle button { padding: 8px 18px; border: none; background: transparent; color: var(--color-text-muted, #666); border-radius: 6px; font-family: var(--font-sans, 'Space Grotesk', sans-serif); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: background 0.2s, color 0.2s; }
+.view-toggle .active { background:#c8f542; color: #0a0a0a; font-weight: 700; }
 
 
 /* Static crime-board style */
@@ -281,16 +285,24 @@ export default {
 .note .pin { position: absolute; width: 8px; height: 8px; background: var(--tint, gold); border-radius: 50%; top: -4px; left: 50%; transform: translateX(-50%); box-shadow: 0 2px 6px rgba(0,0,0,0.45); }
 .note .note-title { font-weight: 700; }
 
-.grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; }
 @media (max-width: 1024px) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
 @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
-.card { border: 1px solid gold; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.25); background: var(--color-background-soft); }
-.image { height: 220px; display: grid; place-items: center; background: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.36)); }
-.image img { width: 100%; height: 100%; object-fit: cover; }
-.content { padding: 12px 14px; }
-.content h3 { margin: 0 0 6px; }
-.mini-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.mini-tags span { font-size: .75rem; border: 1px solid rgba(255,215,0,0.4); border-radius: 999px; padding: 4px 8px; color: gold; }
+.card { border: 1px solid var(--color-border, rgba(0,0,0,0.08)); border-radius: 4px; overflow: hidden; background: var(--color-surface, #fff); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px var(--color-shadow, rgba(0,0,0,0.1)); border-color: var(--c-accent, #c8f542); }
+.card__image { height: 220px; overflow: hidden; background: var(--color-surface-2, #f0efe9); }
+.card__image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.card:hover .card__image img { transform: scale(1.04); }
+.card__content { padding: 20px; }
+.card__meta { margin-bottom: 10px; }
+.card__status { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; font-family: var(--font-sans); }
+.card__status[data-state="live"] { background: rgba(200,245,66,0.15); color: #3a6000; border: 1px solid rgba(200,245,66,0.4); }
+.card__status[data-state="building"] { background: rgba(245,200,66,0.12); color: #7a5500; border: 1px solid rgba(245,200,66,0.35); }
+.card__title { font-family: var(--font-display, 'Space Grotesk', sans-serif); font-size: 1.1rem; font-weight: 700; color: var(--color-heading, #0a0a0a); margin: 0 0 8px; }
+.card__summary { font-size: 0.875rem; color: var(--color-text-muted, #666); line-height: 1.6; margin-bottom: 14px; }
+.card__tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.card__tags span { font-size: 0.72rem; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--color-border, rgba(0,0,0,0.1)); color: var(--color-text-muted, #666); font-family: var(--font-sans); transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.card:hover .card__tags span { background: var(--c-accent, #c8f542); border-color: var(--c-accent, #c8f542); color: #0a0a0a; }
 
 @media (prefers-reduced-motion: reduce) {
   .spiral-in { animation: none !important; opacity: 1 !important; }
@@ -318,16 +330,11 @@ export default {
 
 @media (max-width: 900px) {
   .toggle-bar {
-    position: sticky;
-    top: 66px;
-    right: 0;
-    width: 100%;
     justify-content: center;
-    padding: 6px 10px;
+    margin-bottom: 16px;
   }
 
   .view-toggle {
-    gap: 6px;
     width: min(420px, 100%);
     justify-content: center;
   }

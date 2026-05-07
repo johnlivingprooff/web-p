@@ -1,337 +1,355 @@
 <template>
-    <div class="pod-c">
-      <img src="/imgs/the podcast.png" alt="TJP" id="tjp" class="pod-a">
-      <h2 class="pod-a">I Host a Show called <b style="font-weight: 900">The JohnLivingprooff Podcast</b>,<br>check out some of the recent episodes</h2>
-
-      <!--Display the RSS feed items (podcast episodes) -->
-      <div class="pod"> 
-      <ul v-if="rssItems.length">
-        <li v-for="(item, index) in rssItems.slice(0, 6)" :key="item.link"
-            :style="{ animationDelay: `${index * 0.2}s` }"
-            class="stagger-item pod-item">
-          <img v-if="item.image" :src="item.image" :alt="item.title" />
-          <div class="pod-body">
-            <h3>{{ item.title }}</h3>
-            <audio :src="item.audio" controls></audio>
-            <p><b>Published:</b> {{ item.pubDate }}</p>
-            <!-- <p v-html="item.description"></p> -->
-            <a :href="item.link" target="_blank"><img src="/imgs/spotify-icon.png" width="15px"/> Listen on Spotify</a>
-          </div>
-        </li>
-      </ul>
-
+  <section class="podcast">
+    <div class="podcast__header reveal">
+      <span class="podcast__label">03 — Podcast</span>
+      <div class="podcast__title-row">
+        <div>
+          <h2 class="podcast__title">The JohnLivingprooff<br>Podcast</h2>
+          <p class="podcast__sub">Conversations on life, creativity, and building things that matter.</p>
+        </div>
+        <img src="/imgs/the podcast.png" alt="The JohnLivingprooff Podcast" class="podcast__cover" />
+      </div>
     </div>
-    <div class="pod-links">
-        <a class="btn-s" href="https://open.spotify.com/show/2VgMTD1eFU6R66XkZtRqEJ?si=1f822ae349914e5f" target="_blank"><img src="/imgs/spotify-icon.png" width="12px"/> Listen on Spotify</a>
-        <a class="btn-s" href="https://pod.eiteone.org/" target="_blank">Visit Website</a>
-    </div>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        rssItems: [], // Array to hold parsed RSS feed items
-      };
-    },
-    mounted() {
-      this.fetchRSSFeed();
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
-            } else {
-            entry.target.classList.remove('animate');
-            }
+    <!-- Episodes grid -->
+    <div class="podcast__grid" v-if="rssItems.length">
+      <article
+        v-for="(item, index) in rssItems.slice(0, 6)"
+        :key="item.link"
+        class="podcast__card reveal"
+        :style="{ transitionDelay: `${index * 0.08}s` }"
+      >
+        <div class="podcast__card-img" v-if="item.image">
+          <img :src="item.image" :alt="item.title" />
+        </div>
+        <div class="podcast__card-body">
+          <span class="podcast__ep-num">Ep. {{ rssItems.length - index }}</span>
+          <h3 class="podcast__ep-title">{{ item.title }}</h3>
+          <p class="podcast__ep-date">{{ formatDate(item.pubDate) }}</p>
+          <audio :src="item.audio" controls class="podcast__audio"></audio>
+          <a :href="item.link" target="_blank" class="podcast__spotify-link">
+            <img src="/imgs/spotify-icon.png" width="14" alt="Spotify" />
+            Listen on Spotify
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <!-- Loading state -->
+    <div class="podcast__loading" v-else>
+      <div class="podcast__skeleton" v-for="i in 3" :key="i"></div>
+    </div>
+
+    <!-- Links -->
+    <div class="podcast__footer reveal">
+      <a class="podcast__btn" href="https://open.spotify.com/show/2VgMTD1eFU6R66XkZtRqEJ?si=1f822ae349914e5f" target="_blank">
+        <img src="/imgs/spotify-icon.png" width="14" alt="" />
+        All Episodes on Spotify
+      </a>
+      <a class="podcast__btn podcast__btn--ghost" href="https://pod.eiteone.org/" target="_blank">
+        Visit Podcast Site
+      </a>
+    </div>
+  </section>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return { rssItems: [] };
+  },
+  mounted() {
+    this.fetchRSSFeed();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('revealed');
+      });
+    }, { threshold: 0.1 });
+
+    // Re-observe after items load
+    this.$nextTick(() => {
+      document.querySelectorAll('.podcast .reveal').forEach(el => observer.observe(el));
+    });
+
+    document.querySelectorAll('.podcast .reveal').forEach(el => observer.observe(el));
+  },
+  methods: {
+    async fetchRSSFeed() {
+      try {
+        const response = await axios.get('https://anchor.fm/s/185e0d68/podcast/rss', {
+          headers: { 'Content-Type': 'application/xml; charset=utf-8' },
         });
-        }, { threshold: 0.1 });
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(response.data, 'text/xml');
+        const items = xmlDoc.querySelectorAll('item');
+        this.rssItems = Array.from(items).map(item => ({
+          title: item.querySelector('title').textContent,
+          link: item.querySelector('link').textContent,
+          pubDate: item.querySelector('pubDate').textContent,
+          audio: item.querySelector('enclosure')?.getAttribute('url') || '',
+          image: this.getImageUrl(item),
+        }));
 
-        const observer2 = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                // Add the animate class to all <li> elements within the <ul>
-                const listItems = entry.target.querySelectorAll('li');
-                listItems.forEach((li) => {
-                    li.classList.add('stagger-item');
-                });
-                observer.unobserve(entry.target); // Stop observing once the animation is triggered
-                }
+        this.$nextTick(() => {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) entry.target.classList.add('revealed');
             });
-            }, { threshold: 0.1 });
-
-            // Select the pod <ul> element
-            const podUl = document.querySelector('.pod ul');
-            if (podUl) {
-            observer2.observe(podUl);
-            }
-
-        const selectedElements = document.querySelectorAll('.pod-a');
-        selectedElements.forEach((el) => observer.observe(el));
-
+          }, { threshold: 0.1 });
+          document.querySelectorAll('.podcast .reveal').forEach(el => observer.observe(el));
+        });
+      } catch (e) {
+        console.error('RSS fetch error:', e);
+      }
     },
-    methods: {
-      async fetchRSSFeed() {
-        try {
-          // Fetch the RSS feed content from your podcast RSS URL
-          const response = await axios.get('https://anchor.fm/s/185e0d68/podcast/rss', {
-            headers: { 'Content-Type': 'application/xml; charset=utf-8' },
-          });
-  
-          // Parse the XML response
-          const parser = new DOMParser();
-          const xmlDoc = parser.parseFromString(response.data, 'text/xml');
-  
-          // Extract <item> elements from the XML (each represents an episode)
-          const items = xmlDoc.querySelectorAll('item');
-  
-          // Parse each <item> and get relevant data including image
-          this.rssItems = Array.from(items).map((item) => ({
-            title: item.querySelector('title').textContent,
-            link: item.querySelector('link').textContent,
-            pubDate: item.querySelector('pubDate').textContent,
-            description: item.querySelector('description').textContent,
-            audio: item.querySelector('enclosure') ? item.querySelector('enclosure').getAttribute('url') : '',
-            
-            // Handle multiple potential image sources
-            image: this.getImageUrl(item)
-          }));
-        } catch (error) {
-          console.error('Error fetching or parsing the RSS feed:', error);
-        }
-      },
-  
-      // Helper function to get image URL from different possible tags
-      getImageUrl(item) {
-        // Try fetching from different common image tags
-        const itunesImage = item.querySelector('itunes\\:image');
-        const mediaThumbnail = item.querySelector('media\\:thumbnail');
-        const imageTag = item.querySelector('image');
-  
-        if (itunesImage) {
-          return itunesImage.getAttribute('href');
-        } else if (mediaThumbnail) {
-          return mediaThumbnail.getAttribute('url');
-        } else if (imageTag) {
-          return imageTag.getAttribute('url');
-        } else {
-          return ''; // Fallback if no image is found
-        }
-      },
+    getImageUrl(item) {
+      const itunesImage = item.querySelector('itunes\\:image');
+      const mediaThumbnail = item.querySelector('media\\:thumbnail');
+      if (itunesImage) return itunesImage.getAttribute('href');
+      if (mediaThumbnail) return mediaThumbnail.getAttribute('url');
+      return '';
     },
-  };
-  </script>
-  
+    formatDate(dateStr) {
+      try {
+        return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch { return dateStr; }
+    }
+  }
+};
+</script>
+
 <style scoped>
-.pod-c {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 60px;
-    margin-top: 50px;
-}
-#tjp {
-    grid-row: 1; 
-    grid-column: 2;
-    width: 200px;
-    height: 200px;
-    filter: drop-shadow(-15px 15px 10px  var(--color-shadow));
-    transition: scale 0.3s ease, filter 0.3s ease;
-    perspective: 1000px; /* Gives depth to the transform */
-    z-index: 1500;
-    margin-bottom: 50px;
+
+.podcast {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px clamp(20px, 5vw, 80px) 80px;
+  border-top: 1px solid var(--color-border, rgba(0,0,0,0.08));
 }
 
-#tjp:hover {
-    scale: 1.05;
-    filter: drop-shadow(-25px 25px 20px  var(--color-shadow));
+.podcast__label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #888);
+  font-family: 'Space Grotesk', sans-serif;
+  margin-bottom: 32px;
 }
 
-.pod-a {
-    opacity: 0;
-    text-align: center;
-    font-family: 'Raleway', sans-serif;
-    margin-top: 25px;
-    margin-bottom: 50px;
-    font-weight: 500;
+.podcast__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 80px;
 }
 
-@keyframes stagger {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.podcast__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  font-weight: 700;
+  color: var(--color-heading, #0a0a0a);
+  line-height: 1.1;
+  margin-bottom: 16px;
 }
 
-.animate {
-  animation: stagger .5s ease forwards;
-  animation-delay: 0.5s;
+.podcast__sub {
+  font-size: 1rem;
+  color: var(--color-text-muted, #666);
+  max-width: 380px;
+  line-height: 1.7;
 }
 
-.pod {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    width: 80%;
-    z-index: 1620;
+.podcast__cover {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.pod ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 40px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    place-content: center;
+.podcast__cover:hover {
+  transform: translateY(-4px) rotate(-2deg);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
 }
 
-.pod li {
-  padding: 20px;
-  border-radius: 10px;
-  font-family: 'Raleway', sans-serif;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  grid-column: span 1;
-  transform: translateX(-50px);
-  opacity: 0;
+/* Grid */
+.podcast__grid {
   display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 60px;
 }
 
-.stagger-item {
-  animation: stagger-r .5s ease forwards;
+.podcast__card {
+  background: var(--box-color, #fff);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-border, rgba(0,0,0,0.08));
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-@keyframes stagger-r {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.podcast__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px var(--color-shadow, rgba(0,0,0,0.1));
 }
 
-/* editing each list of the pod */
-.pod-item {
-  background: var(--box-color);
-  color: var(--color-text2);
-  transition: all 0.3s ease-in-out;
-}
-
-.pod-item:hover {
-    scale: 0.98;
-  color: var(--color-link);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(145deg, #dbce18, #db2f18);
-}
-
-.pod-item a {
-    color: var(--color-link2);
-    text-decoration: none;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.3s ease-in-out;
-}
-
-.pod-item a:hover {
-    color: var(--color-link-hover);
-    scale: 0.98;
-}
-
-.pod-item h3 {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.pod-item img {
+.podcast__card-img img {
   width: 100%;
   height: 180px;
   object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  display: block;
 }
 
-.pod-body {
+.podcast__card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.podcast__ep-num {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #888);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.podcast__ep-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-heading, #0a0a0a);
+  line-height: 1.4;
+}
+
+.podcast__ep-date {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #888);
+}
+
+.podcast__audio {
+  width: 100%;
+  height: 36px;
+  border-radius: 999px;
+  margin-top: 4px;
+}
+
+.podcast__spotify-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #888);
+  text-decoration: none;
+  font-family: 'Space Grotesk', sans-serif;
+  transition: color 0.2s;
+  margin-top: 4px;
+}
+
+.podcast__spotify-link:hover {
+  color: #1DB954;
+}
+
+/* Loading skeleton */
+.podcast__loading {
   display: grid;
-  grid-template-rows: auto auto auto auto;
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 60px;
 }
 
-.pod-item audio {
-    width: 100%;
-    margin-bottom: 10px;
-    background: transparent;
-    color: red;
-    border: 1px solid var(--color-text2);
-    border-radius: 45px 45px 45px 10px;
+.podcast__skeleton {
+  height: 320px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--color-surface-2, #f0efe9) 25%, var(--color-surface, #fff) 50%, var(--color-surface-2, #f0efe9) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
-.btn-s {
-    background: var(--color-link);
-    color: var(--color-link2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 45px;
-    font-weight: 600;
-    font-size: .8rem;
-    transition: all 0.3s ease-in-out;
-    width: 180px;
-    text-align: center;
-    align-self: center;
-    text-decoration: none;
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
-.btn-s:hover {
-    background: var(--color-link-hover);
-    color: var(--color-link);
-    scale: 0.98;
-    box-shadow: 0 0 15px #dbce18;
+
+/* Footer */
+.podcast__footer {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.podcast__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #f5f4f0;
+  color: #0a0a0a;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.podcast__btn:hover {
+  background: #1DB954;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.podcast__btn--ghost {
+  background: transparent;
+  color: var(--color-heading, #0a0a0a);
+  border: 1px solid var(--color-border, rgba(0,0,0,0.2));
+}
+
+.podcast__btn--ghost:hover {
+  color: var(--c-off-white, #f5f4f0);
+}
+
+/* Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (max-width: 768px) {
-    .pod ul {
-        grid-template-columns: repeat(1, 1fr);
-    }
-    .pod-item {
-        grid-column: span 1;
-    transform: none;
-      padding: 0;
-      overflow: hidden;
-      border-radius: 14px;
-    }
-
-  .pod-item img {
-      height: 210px;
-      border-radius: 0;
-      box-shadow: none;
+  .podcast {
+    padding: 60px 20px;
   }
 
-    .pod-body {
-      padding: 16px;
-      background: var(--box-color);
-    }
-}
+  .podcast__title-row {
+    flex-direction: column-reverse;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
 
-.pod-links {
-  margin-top: 15px;
-  display: grid;
-  justify-content: center;
-  place-content: center;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
+  .podcast__cover {
+    width: 100px;
+    height: 100px;
+  }
+
+  .podcast__grid,
+  .podcast__loading {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
