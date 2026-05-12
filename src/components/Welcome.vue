@@ -45,7 +45,7 @@
         const languages = [
           "Welcome", "Kaabo", "Karibu", "Akwaaba", "Talofa", "Molweni",
           "Fáilte", "Mauya", "Bienvenue", "Amari", "Yîb griñ", "Tukulor",
-          "مرحبا", "أهلاً وسهلاً", "Sawubona", "Hoezit", "Fàilte", "Ia orana",
+          "مرحبا", "أهلاً وسهلاً", "Dumela","Sawubona", "Hoezit", "Fàilte", "Ia orana",
           "Kushe", "Welkom", "Sawubona", "Talofa", "مرحبا", "Welcome"
         ];
         
