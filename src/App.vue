@@ -10,8 +10,10 @@ export default {
 <template>
   <div class="container">
     <div class="nav">
-      <router-link v-if="$route.path === '/projects' || $route.path.startsWith('/projects/')" to="/">#johnlivingprooff</router-link>
-      <router-link v-else to="/projects">Projects</router-link>
+      <router-link v-if="$route.path === '/projects' || $route.path.startsWith('/projects/') || $route.path === '/podcast'" to="/">#johnlivingprooff</router-link>
+      <template v-else>
+        <router-link to="/projects">Projects</router-link>
+      </template>
     </div>
     <router-view />
     <Footer />

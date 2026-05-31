@@ -5,7 +5,7 @@
       <div class="podcast__title-row">
         <div>
           <h2 class="podcast__title">The JohnLivingprooff<br>Podcast</h2>
-          <p class="podcast__sub">Conversations on life, creativity, and building things that matter.</p>
+          <p class="podcast__sub">Conversations on life, creativity, and our shared experiences</p>
         </div>
         <img src="/imgs/the podcast.png" alt="The JohnLivingprooff Podcast" class="podcast__cover" />
       </div>
