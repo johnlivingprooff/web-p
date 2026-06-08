@@ -19,23 +19,18 @@
         </div>
       </header>
 
-      <!-- Spotify embed (if episode ID known) or fallback link -->
-      <div class="ep-detail__player" v-if="spotifyEmbedUrl">
-        <iframe
-          :src="spotifyEmbedUrl"
-          width="100%" height="152" frameborder="0"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy" title="Spotify episode player"
-        ></iframe>
+      <!-- Audio player -->
+      <div class="ep-detail__player" v-if="episode.audioUrl">
+        <AudioPlayer :src="episode.audioUrl" />
       </div>
-      <div v-else class="ep-detail__player-fallback">
+
+      <!-- Description -->
+      <div class="ep-detail__desc">
+        <p>{{ episode.description }}</p>
         <a :href="episode.spotifyUrl" target="_blank" rel="noopener noreferrer" class="ep-detail__spotify-btn">
           <img src="/imgs/spotify-icon.png" width="16" alt="" /> Listen on Spotify
         </a>
       </div>
-
-      <!-- Description -->
-      <div class="ep-detail__desc"><p>{{ episode.description }}</p></div>
 
       <!-- Giscus comments -->
       <div class="ep-detail__comments">
@@ -44,10 +39,6 @@
           Sign in with GitHub to comment. Powered by
           <a href="https://giscus.app" target="_blank" rel="noopener noreferrer">Giscus</a>.
         </p>
-        <!--
-          SETUP: Visit https://giscus.app, enable Discussions on your repo,
-          then fill in data-repo-id and data-category-id below.
-        -->
         <div ref="giscus"></div>
       </div>
     </article>
@@ -66,18 +57,15 @@
 <script>
 import axios from 'axios';
 import { episodes as staticEpisodes, rssItemToEpisode } from '@/data/episodes.js';
+import AudioPlayer from '@/components/AudioPlayer.vue';
 
 export default {
   name: 'EpisodeDetailView',
+  components: { AudioPlayer },
   data() {
     return { episode: null, allEpisodes: [] };
   },
-  computed: {
-    spotifyEmbedUrl() {
-      const id = this.episode?.spotifyEpisodeId;
-      return id ? `https://open.spotify.com/embed/episode/${id}?utm_source=generator&theme=0` : '';
-    },
-  },
+  computed: {},
   async mounted() {
     await this.loadEpisodes();
     this.findEpisode();
@@ -111,10 +99,10 @@ export default {
       const s = document.createElement('script');
       s.src = 'https://giscus.app/client.js';
       s.async = true;
-      s.setAttribute('data-repo', 'johnlivingprooff/me.eiteone.org');
-      s.setAttribute('data-repo-id', '');          // ← fill in from giscus.app
+      s.setAttribute('data-repo', 'johnlivingprooff/web-p');
+      s.setAttribute('data-repo-id', 'R_kgDOMvgsag');
       s.setAttribute('data-category', 'Podcast');
-      s.setAttribute('data-category-id', '');      // ← fill in from giscus.app
+      s.setAttribute('data-category-id', 'DIC_kwDOMvgsas4C-uIB');
       s.setAttribute('data-mapping', 'specific');
       s.setAttribute('data-term', this.episode.slug);
       s.setAttribute('data-strict', '0');
@@ -209,37 +197,38 @@ export default {
 }
 .ep-detail__dot { opacity: 0.5; }
 
-.ep-detail__player { margin-bottom: 40px; border-radius: 12px; overflow: hidden; }
-.ep-detail__player iframe { display: block; border-radius: 12px; }
-
-.ep-detail__player-fallback { margin-bottom: 40px; }
-
-.ep-detail__spotify-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 28px;
-  background: #1DB954;
-  color: #fff;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 700;
-  font-family: var(--font-sans);
-  letter-spacing: 0.04em;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.ep-detail__spotify-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(29,185,84,0.3);
-}
+.ep-detail__player { margin-bottom: 40px; }
 
 .ep-detail__desc {
   margin-bottom: 60px;
   padding-bottom: 60px;
   border-bottom: 1px solid var(--color-border, rgba(0,0,0,0.08));
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 .ep-detail__desc p { font-size: 1rem; line-height: 1.8; color: var(--color-text, #111); }
+
+.ep-detail__spotify-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: #1DB954;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.ep-detail__spotify-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(29,185,84,0.3);
+}
 
 .ep-detail__comments-title {
   font-family: var(--font-display);

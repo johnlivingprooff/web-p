@@ -96,10 +96,19 @@ export const episodes = [
  * Converts an RSS item to the episode shape above.
  * Call this when merging RSS feed data with static fallback.
  */
+function decodeHtml(html) {
+  // Strip tags then decode HTML entities via a temporary textarea
+  const stripped = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const txt = document.createElement('textarea');
+  txt.innerHTML = stripped;
+  return txt.value;
+}
+
 export function rssItemToEpisode(item, index, total) {
   const title = item.querySelector('title')?.textContent || '';
   const pubDate = item.querySelector('pubDate')?.textContent || '';
-  const description = item.querySelector('description')?.textContent?.replace(/<[^>]*>/g, '') || '';
+  const rawDesc = item.querySelector('description')?.textContent || '';
+  const description = decodeHtml(rawDesc);
   const link = item.querySelector('link')?.textContent || '';
   const enclosure = item.querySelector('enclosure');
   const itunesImage = item.querySelector('itunes\\:image');
@@ -133,6 +142,7 @@ export function rssItemToEpisode(item, index, total) {
     duration,
     description,
     image: itunesImage?.getAttribute('href') || mediaThumbnail?.getAttribute('url') || '/imgs/the podcast.png',
+    audioUrl: enclosure?.getAttribute('url') || '',
     spotifyEpisodeId,
     spotifyUrl: link || 'https://open.spotify.com/show/2VgMTD1eFU6R66XkZtRqEJ',
   };
