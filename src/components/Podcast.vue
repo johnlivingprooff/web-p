@@ -106,7 +106,8 @@ export default {
         const res = await axios.get('https://anchor.fm/s/185e0d68/podcast/rss');
         const doc = new DOMParser().parseFromString(res.data, 'text/xml');
         const items = Array.from(doc.querySelectorAll('item'));
-        this.episodes = items.map((item, i) => rssItemToEpisode(item, i, items.length));
+        const channelImage = doc.querySelector('channel > itunes\\:image')?.getAttribute('href');
+        this.episodes = items.map((item, i) => rssItemToEpisode(item, i, items.length, channelImage));
       } catch {
         this.episodes = staticEpisodes;
       } finally {

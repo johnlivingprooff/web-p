@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { stripHtml } from '../data/episodes.js';
+
 export default {
   name: 'EpisodeCard',
   emits: ['click'],
@@ -38,7 +40,8 @@ export default {
   },
   computed: {
     truncated() {
-      const d = this.episode.description || '';
+      const html = this.episode.description || '';
+      const d = stripHtml(html);
       return d.length > 120 ? d.slice(0, 120).trimEnd() + '…' : d;
     },
   },

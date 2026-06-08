@@ -97,14 +97,28 @@ export const episodes = [
  * Call this when merging RSS feed data with static fallback.
  */
 function decodeHtml(html) {
-  // Strip tags then decode HTML entities via a temporary textarea
-  const stripped = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  // Decode HTML entities via a temporary textarea, preserving HTML tags
   const txt = document.createElement('textarea');
-  txt.innerHTML = stripped;
+  txt.innerHTML = html;
   return txt.value;
 }
 
-export function rssItemToEpisode(item, index, total) {
+export function stripHtml(html) {
+  // Strip HTML tags but preserve paragraph and line breaks for plain text
+  let text = html
+    .replace(/<p[^>]*>/gi, '')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+  const txt = document.createElement('textarea');
+  txt.innerHTML = text;
+  return txt.value;
+}
+
+export function rssItemToEpisode(item, index, total, channelImage) {
   const title = item.querySelector('title')?.textContent || '';
   const pubDate = item.querySelector('pubDate')?.textContent || '';
   const rawDesc = item.querySelector('description')?.textContent || '';
@@ -141,9 +155,9 @@ export function rssItemToEpisode(item, index, total) {
     date: pubDate ? new Date(pubDate).toISOString().split('T')[0] : '',
     duration,
     description,
-    image: itunesImage?.getAttribute('href') || mediaThumbnail?.getAttribute('url') || '/imgs/the podcast.png',
+    image: itunesImage?.getAttribute('href') || mediaThumbnail?.getAttribute('url') || channelImage || '/imgs/the podcast.png',
     audioUrl: enclosure?.getAttribute('url') || '',
     spotifyEpisodeId,
-    spotifyUrl: link || 'https://open.spotify.com/show/2VgMTD1eFU6R66XkZtRqEJ',
+    spotifyUrl: spotifyEpisodeId ? `https://open.spotify.com/episode/${spotifyEpisodeId}` : (link || 'https://open.spotify.com/show/2VgMTD1eFU6R66XkZtRqEJ'),
   };
 }

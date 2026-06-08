@@ -32,20 +32,17 @@
 
       <!-- Description -->
       <div class="ep-detail__desc">
-        <p>{{ episode.description }}</p>
+        <div v-html="episode.description"></div>
         <a :href="episode.spotifyUrl" target="_blank" rel="noopener noreferrer" class="ep-detail__spotify-btn">
           <img src="/imgs/spotify-icon.png" width="16" alt="" /> Listen on Spotify
         </a>
       </div>
 
-      <!-- Giscus comments -->
       <div class="ep-detail__comments">
         <h2 class="ep-detail__comments-title">Join the conversation</h2>
-        <p class="ep-detail__comments-hint">
-          Sign in with GitHub to comment. Powered by
-          <a href="https://giscus.app" target="_blank" rel="noopener noreferrer">Giscus</a>.
-        </p>
-        <div ref="giscus"></div>
+        <a :href="episode.spotifyUrl" target="_blank" rel="noopener noreferrer" class="ep-detail__spotify-comment-link">
+          Leave a Comment on Spotify
+        </a>
       </div>
     </article>
   </div>
@@ -62,8 +59,19 @@
 
 <script>
 import axios from 'axios';
-import { episodes as staticEpisodes, rssItemToEpisode } from '@/data/episodes.js';
+import { episodes as staticEpisodes, rssItemToEpisode, stripHtml } from '@/data/episodes.js';
 import { playerStore } from '@/playerStore.js';
+
+const DEFAULTS = {
+  title: document.title,
+  description: document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
+  ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute('content') || '',
+  ogDescription: document.querySelector('meta[property="og:description"]')?.getAttribute('content') || '',
+  ogImage: document.querySelector('meta[property="og:image"]')?.getAttribute('content') || '',
+  twitterTitle: document.querySelector('meta[name="twitter:title"]')?.getAttribute('content') || '',
+  twitterDescription: document.querySelector('meta[name="twitter:description"]')?.getAttribute('content') || '',
+  twitterImage: document.querySelector('meta[name="twitter:image"]')?.getAttribute('content') || '',
+};
 
 export default {
   name: 'EpisodeDetailView',
@@ -79,12 +87,15 @@ export default {
   async mounted() {
     await this.loadEpisodes();
     this.findEpisode();
-    this.$nextTick(() => this.mountGiscus());
+    this.updateMeta();
+  },
+  beforeUnmount() {
+    this.restoreMeta();
   },
   watch: {
     '$route.params.slug'() {
       this.findEpisode();
-      this.$nextTick(() => this.mountGiscus());
+      this.$nextTick(() => this.updateMeta());
     },
   },
   methods: {
@@ -93,7 +104,8 @@ export default {
         const res = await axios.get('https://anchor.fm/s/185e0d68/podcast/rss');
         const doc = new DOMParser().parseFromString(res.data, 'text/xml');
         const items = Array.from(doc.querySelectorAll('item'));
-        this.allEpisodes = items.map((item, i) => rssItemToEpisode(item, i, items.length));
+        const channelImage = doc.querySelector('channel > itunes\\:image')?.getAttribute('href');
+        this.allEpisodes = items.map((item, i) => rssItemToEpisode(item, i, items.length, channelImage));
       } catch {
         this.allEpisodes = staticEpisodes;
       }
@@ -101,6 +113,42 @@ export default {
     findEpisode() {
       const slug = this.$route.params.slug;
       this.episode = this.allEpisodes.find(e => e.slug === slug) || null;
+    },
+    updateMeta() {
+      const ep = this.episode;
+      if (!ep) return;
+      const desc = stripHtml(ep.description).slice(0, 200);
+      const image = ep.image || DEFAULTS.ogImage;
+      document.title = `${ep.title} — #johnlivingprooff`;
+      this.setMeta('description', desc);
+      this.setMeta('og:title', ep.title);
+      this.setMeta('og:description', desc);
+      this.setMeta('og:image', image);
+      this.setMeta('twitter:title', ep.title);
+      this.setMeta('twitter:description', desc);
+      this.setMeta('twitter:image', image);
+    },
+    restoreMeta() {
+      document.title = DEFAULTS.title;
+      this.setMeta('description', DEFAULTS.description);
+      this.setMeta('og:title', DEFAULTS.ogTitle);
+      this.setMeta('og:description', DEFAULTS.ogDescription);
+      this.setMeta('og:image', DEFAULTS.ogImage);
+      this.setMeta('twitter:title', DEFAULTS.twitterTitle);
+      this.setMeta('twitter:description', DEFAULTS.twitterDescription);
+      this.setMeta('twitter:image', DEFAULTS.twitterImage);
+    },
+    setMeta(property, content) {
+      // Try og/twitter property, fall back to name
+      let el = document.querySelector(`meta[property="${property}"]`) || document.querySelector(`meta[name="${property}"]`);
+      if (el) {
+        el.setAttribute('content', content);
+      } else {
+        el = document.createElement('meta');
+        el.setAttribute(property.includes(':') ? 'property' : 'name', property);
+        el.setAttribute('content', content);
+        document.head.appendChild(el);
+      }
     },
     playEpisode() {
       if (this.isPlaying) {
@@ -110,29 +158,6 @@ export default {
       } else {
         this.store.play(this.episode);
       }
-    },
-    mountGiscus() {
-      const el = this.$refs.giscus;
-      if (!el || !this.episode) return;
-      el.innerHTML = '';
-      const s = document.createElement('script');
-      s.src = 'https://giscus.app/client.js';
-      s.async = true;
-      s.setAttribute('data-repo', 'johnlivingprooff/web-p');
-      s.setAttribute('data-repo-id', 'R_kgDOMvgsag');
-      s.setAttribute('data-category', 'Podcast');
-      s.setAttribute('data-category-id', 'DIC_kwDOMvgsas4C-uIB');
-      s.setAttribute('data-mapping', 'specific');
-      s.setAttribute('data-term', this.episode.slug);
-      s.setAttribute('data-strict', '0');
-      s.setAttribute('data-reactions-enabled', '1');
-      s.setAttribute('data-emit-metadata', '0');
-      s.setAttribute('data-input-position', 'bottom');
-      s.setAttribute('data-theme', 'preferred_color_scheme');
-      s.setAttribute('data-lang', 'en');
-      s.setAttribute('data-loading', 'lazy');
-      s.setAttribute('crossorigin', 'anonymous');
-      el.appendChild(s);
     },
     formatDate(d) {
       if (!d) return '';
@@ -296,14 +321,18 @@ export default {
   margin-bottom: 8px;
 }
 
-.ep-detail__comments-hint {
-  font-size: 0.85rem;
-  color: var(--color-text-muted, #888);
-  margin-bottom: 32px;
-  line-height: 1.6;
+.ep-detail__spotify-comment-link {
+  display: inline-block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-heading, #0a0a0a);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
 }
-.ep-detail__comments-hint a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
-.ep-detail__comments-hint a:hover { color: var(--color-heading, #0a0a0a); }
+.ep-detail__spotify-comment-link:hover {
+  color: #1DB954;
+}
 
 .ep-detail__404 { font-size: 1.1rem; color: var(--color-text-muted, #888); padding-top: 60px; }
 
