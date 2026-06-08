@@ -1,23 +1,23 @@
 <script>
 import Footer from '@/components/Footer.vue';
+import FloatingPlayer from '@/components/FloatingPlayer.vue';
 export default {
-  components: {
-    Footer,
-  },
+  components: { Footer, FloatingPlayer },
 };
 </script>
 
 <template>
   <div class="container">
     <div class="nav">
-      <router-link v-if="$route.path === '/projects' || $route.path.startsWith('/projects/') || $route.path === '/podcast'" to="/">#johnlivingprooff</router-link>
+      <router-link v-if="$route.path === '/projects' || $route.path.startsWith('/projects/') || $route.path === '/podcast' || $route.path.startsWith('/podcast/')" to="/">#johnlivingprooff</router-link>
       <template v-else>
         <router-link to="/projects">Projects</router-link>
       </template>
     </div>
     <router-view />
     <Footer />
-</div>
+    <FloatingPlayer />
+  </div>
 </template>
 
 <style scoped>

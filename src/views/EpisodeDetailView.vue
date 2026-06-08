@@ -19,9 +19,15 @@
         </div>
       </header>
 
-      <!-- Audio player -->
+      <!-- Audio player trigger -->
       <div class="ep-detail__player" v-if="episode.audioUrl">
-        <AudioPlayer :src="episode.audioUrl" />
+        <button class="ep-detail__play-btn" @click="playEpisode" :aria-label="isPlaying ? 'Pause episode' : 'Play episode'">
+          <span class="ep-detail__play-icon">
+            <svg v-if="!isPlaying" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+            <svg v-else viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </span>
+          <span>{{ isPlaying ? 'Now playing' : 'Play episode' }}</span>
+        </button>
       </div>
 
       <!-- Description -->
@@ -57,15 +63,19 @@
 <script>
 import axios from 'axios';
 import { episodes as staticEpisodes, rssItemToEpisode } from '@/data/episodes.js';
-import AudioPlayer from '@/components/AudioPlayer.vue';
+import { playerStore } from '@/playerStore.js';
 
 export default {
   name: 'EpisodeDetailView',
-  components: { AudioPlayer },
+  components: {},
   data() {
-    return { episode: null, allEpisodes: [] };
+    return { episode: null, allEpisodes: [], store: playerStore };
   },
-  computed: {},
+  computed: {
+    isPlaying() {
+      return this.store.episode?.slug === this.episode?.slug && this.store.playing;
+    },
+  },
   async mounted() {
     await this.loadEpisodes();
     this.findEpisode();
@@ -91,6 +101,15 @@ export default {
     findEpisode() {
       const slug = this.$route.params.slug;
       this.episode = this.allEpisodes.find(e => e.slug === slug) || null;
+    },
+    playEpisode() {
+      if (this.isPlaying) {
+        this.store.playing = false;
+      } else if (this.store.episode?.slug === this.episode.slug) {
+        this.store.playing = true;
+      } else {
+        this.store.play(this.episode);
+      }
     },
     mountGiscus() {
       const el = this.$refs.giscus;
@@ -198,6 +217,45 @@ export default {
 .ep-detail__dot { opacity: 0.5; }
 
 .ep-detail__player { margin-bottom: 40px; }
+
+.ep-detail__play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: var(--color-heading, #0a0a0a);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.ep-detail__play-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .ep-detail__play-btn { color: var(--c-off-white, #f5f4f0); border-color: rgba(255,255,255,0.1); }
+}
+
+.ep-detail__play-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--c-accent, #c8f542);
+  color: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
 .ep-detail__desc {
   margin-bottom: 60px;
