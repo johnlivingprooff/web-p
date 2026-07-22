@@ -16,7 +16,7 @@
         </p>
       </div>
       <div class="about__intro-img">
-        <img src="/imgs/me.jpg" alt="John" />
+        <img src="/imgs/me4.jpg" alt="John" />
       </div>
     </div>
 
