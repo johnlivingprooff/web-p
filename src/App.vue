@@ -1,8 +1,9 @@
 <script>
 import Footer from '@/components/Footer.vue';
 import FloatingPlayer from '@/components/FloatingPlayer.vue';
+import { Analytics } from "@vercel/analytics/next";
 export default {
-  components: { Footer, FloatingPlayer },
+  components: { Footer, FloatingPlayer, Analytics },
 };
 </script>
 
@@ -17,6 +18,7 @@ export default {
     <router-view />
     <Footer />
     <FloatingPlayer />
+    <Analytics />
   </div>
 </template>
 
