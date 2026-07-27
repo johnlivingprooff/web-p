@@ -12,7 +12,7 @@
           Woven—a blend<br>of fear and love.
         </h2>
         <p class="about__sub">
-          Writer, designer, creative, innovator. A fusion of creativity and technology.
+          Writer, designer, digital creative. A fusion of innovation and technology.
         </p>
       </div>
       <div class="about__intro-img">
@@ -24,12 +24,15 @@
     <div class="about__bio reveal">
       <div class="about__bio-col">
         <h3>Background</h3>
+
         <p>
-          Since 2020, I've been <strong>building web and software solutions</strong>—driven by passion and shaped through both <strong>self-learning</strong> and <strong>formal training</strong>. With support from institutions like <strong>ALX Africa</strong> and <strong>Techno Brain</strong>, I've gained fluency in a range of languages and frameworks.
+          <strong>I build software that helps businesses work smarter.</strong>
+
+          I've always been fascinated by how thoughtful technology can simplify complex work. Since 2020, I've been turning that curiosity into <strong>digital products</strong>, combining self-directed learning, formal training, and hands-on experience to build solutions that people genuinely enjoy using.
+
+          Today, through <a href="https://81px.vercel.app/" target="_blank">81PIXELS</a>, I partner with businesses to create web applications, business systems, and digital experiences that are clean, reliable, and built to solve real problems.
         </p>
-        <p>
-          Now, through <a href="https://81px.vercel.app/" target="_blank">81PIXELS</a>, I design clean, purpose-driven digital products for those who value clarity, speed, and real results.
-        </p>
+
       </div>
       <div class="about__bio-col">
         <h3>Skills</h3>
@@ -58,7 +61,7 @@
       <div class="about__work-text">
         <h3>My Work</h3>
         <p>
-          I've collaboratively worked on relevant development projects throughout my learning experience at ALX, where I devoted 1 year to Software Engineering. Looking ahead, I aim to specialize in AI-driven development and contribute to open-source communities.
+          Each project in this portfolio reflects a challenge, a solution, and the lessons learned along the way. From business systems and web applications to digital experiences, I focus on building software that's practical, scalable, and designed with real users in mind. As I continue to grow, I'm exploring AI-powered development and contributing to open-source technologies that push the web forward.
         </p>
         <div class="about__cta-row">
           <a class="about__cta" href="https://github.com/johnlivingprooff?tab=repositories" target="_blank">
