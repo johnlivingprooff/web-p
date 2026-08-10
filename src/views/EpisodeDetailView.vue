@@ -57,115 +57,87 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios';
-import { episodes as staticEpisodes, rssItemToEpisode, stripHtml } from '@/data/episodes.js';
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
+import { fetchEpisodes } from '@/data/rss.js';
+import { stripHtml } from '@/data/episodes.js';
 import { playerStore } from '@/playerStore.js';
 
-const DEFAULTS = {
-  title: document.title,
-  description: document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
-  ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute('content') || '',
-  ogDescription: document.querySelector('meta[property="og:description"]')?.getAttribute('content') || '',
-  ogImage: document.querySelector('meta[property="og:image"]')?.getAttribute('content') || '',
-  twitterTitle: document.querySelector('meta[name="twitter:title"]')?.getAttribute('content') || '',
-  twitterDescription: document.querySelector('meta[name="twitter:description"]')?.getAttribute('content') || '',
-  twitterImage: document.querySelector('meta[name="twitter:image"]')?.getAttribute('content') || '',
+const SITE_URL = 'https://me.eiteone.org';
+const SITE_TITLE = '#johnlivingprooff';
+
+const toAbsolute = (src) => {
+  if (!src) return `${SITE_URL}/og-image.jpg`;
+  if (src.startsWith('http')) return src;
+  return `${SITE_URL}${src.startsWith('/') ? src : `/${src}`}`;
 };
 
-export default {
-  name: 'EpisodeDetailView',
-  components: {},
-  data() {
-    return { episode: null, allEpisodes: [], store: playerStore };
+const route = useRoute();
+
+// During SSR and hydration the matched episode is carried via `route.meta.state`
+// (set by the guard in main.js and restored from window.__INITIAL_STATE__).
+const episodes = ref([]);
+const initialState = route.meta.state;
+if (initialState?.episode) {
+  episodes.value = [initialState.episode];
+}
+
+const episode = computed(() => episodes.value.find((e) => e.slug === route.params.slug) || null);
+const isPlaying = computed(() => playerStore.episode?.slug === episode.value?.slug && playerStore.playing);
+
+useHead({
+  title: () => (episode.value ? `${episode.value.title} — ${SITE_TITLE}` : SITE_TITLE),
+  meta: () => {
+    if (!episode.value) {
+      return [
+        { property: 'og:title', content: SITE_TITLE },
+        { property: 'og:image', content: toAbsolute(null) },
+      ];
+    }
+    const desc = stripHtml(episode.value.description).slice(0, 200);
+    const image = toAbsolute(episode.value.image);
+    return [
+      { name: 'description', content: desc },
+      { property: 'og:title', content: episode.value.title },
+      { property: 'og:description', content: desc },
+      { property: 'og:image', content: image },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: episode.value.title },
+      { name: 'twitter:description', content: desc },
+      { name: 'twitter:image', content: image },
+    ];
   },
-  computed: {
-    isPlaying() {
-      return this.store.episode?.slug === this.episode?.slug && this.store.playing;
-    },
-  },
-  async mounted() {
-    await this.loadEpisodes();
-    this.findEpisode();
-    this.updateMeta();
-  },
-  beforeUnmount() {
-    this.restoreMeta();
-  },
-  watch: {
-    '$route.params.slug'() {
-      this.findEpisode();
-      this.$nextTick(() => this.updateMeta());
-    },
-  },
-  methods: {
-    async loadEpisodes() {
-      try {
-        const res = await axios.get('https://anchor.fm/s/185e0d68/podcast/rss');
-        const doc = new DOMParser().parseFromString(res.data, 'text/xml');
-        const items = Array.from(doc.querySelectorAll('item'));
-        const channelImage = doc.querySelector('channel > itunes\\:image')?.getAttribute('href');
-        this.allEpisodes = items.map((item, i) => rssItemToEpisode(item, i, items.length, channelImage));
-      } catch {
-        this.allEpisodes = staticEpisodes;
-      }
-    },
-    findEpisode() {
-      const slug = this.$route.params.slug;
-      this.episode = this.allEpisodes.find(e => e.slug === slug) || null;
-    },
-    updateMeta() {
-      const ep = this.episode;
-      if (!ep) return;
-      const desc = stripHtml(ep.description).slice(0, 200);
-      const image = ep.image || DEFAULTS.ogImage;
-      document.title = `${ep.title} — #johnlivingprooff`;
-      this.setMeta('description', desc);
-      this.setMeta('og:title', ep.title);
-      this.setMeta('og:description', desc);
-      this.setMeta('og:image', image);
-      this.setMeta('twitter:title', ep.title);
-      this.setMeta('twitter:description', desc);
-      this.setMeta('twitter:image', image);
-    },
-    restoreMeta() {
-      document.title = DEFAULTS.title;
-      this.setMeta('description', DEFAULTS.description);
-      this.setMeta('og:title', DEFAULTS.ogTitle);
-      this.setMeta('og:description', DEFAULTS.ogDescription);
-      this.setMeta('og:image', DEFAULTS.ogImage);
-      this.setMeta('twitter:title', DEFAULTS.twitterTitle);
-      this.setMeta('twitter:description', DEFAULTS.twitterDescription);
-      this.setMeta('twitter:image', DEFAULTS.twitterImage);
-    },
-    setMeta(property, content) {
-      // Try og/twitter property, fall back to name
-      let el = document.querySelector(`meta[property="${property}"]`) || document.querySelector(`meta[name="${property}"]`);
-      if (el) {
-        el.setAttribute('content', content);
-      } else {
-        el = document.createElement('meta');
-        el.setAttribute(property.includes(':') ? 'property' : 'name', property);
-        el.setAttribute('content', content);
-        document.head.appendChild(el);
-      }
-    },
-    playEpisode() {
-      if (this.isPlaying) {
-        this.store.playing = false;
-      } else if (this.store.episode?.slug === this.episode.slug) {
-        this.store.playing = true;
-      } else {
-        this.store.play(this.episode);
-      }
-    },
-    formatDate(d) {
-      if (!d) return '';
-      try { return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
-      catch { return d; }
-    },
-  },
-};
+});
+
+async function loadEpisodes() {
+  episodes.value = await fetchEpisodes();
+}
+
+onMounted(loadEpisodes);
+
+watch(() => route.params.slug, () => {
+  if (!episodes.value.some((e) => e.slug === route.params.slug)) {
+    loadEpisodes();
+  }
+});
+
+function playEpisode() {
+  if (isPlaying.value) {
+    playerStore.playing = false;
+  } else if (playerStore.episode?.slug === episode.value.slug) {
+    playerStore.playing = true;
+  } else {
+    playerStore.play(episode.value);
+  }
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  try { return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+  catch { return d; }
+}
 </script>
 
 <style scoped>

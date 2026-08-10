@@ -92,20 +92,33 @@ export const episodes = [
   },
 ];
 
-/**
- * Converts an RSS item to the episode shape above.
- * Call this when merging RSS feed data with static fallback.
- */
-function decodeHtml(html) {
-  // Decode HTML entities via a temporary textarea, preserving HTML tags
-  const txt = document.createElement('textarea');
-  txt.innerHTML = html;
-  return txt.value;
+const ENTITY_MAP = {
+  amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
+  rsquo: '\u2019', lsquo: '\u2018', mdash: '\u2014', ndash: '\u2013', hellip: '\u2026',
+};
+
+export function decodeEntities(html) {
+  if (typeof document !== 'undefined') {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  }
+  return html.replace(/&(#x?[0-9a-f]+|\w+);/gi, (match, entity) => {
+    if (entity[0] === '#') {
+      const isHex = entity[1] === 'x' || entity[1] === 'X';
+      const code = isHex ? parseInt(entity.slice(2), 16) : parseInt(entity.slice(1), 10);
+      return Number.isNaN(code) ? match : String.fromCodePoint(code);
+    }
+    return ENTITY_MAP[entity.toLowerCase()] ?? match;
+  });
+}
+
+export function decodeHtml(html) {
+  return decodeEntities(html);
 }
 
 export function stripHtml(html) {
-  // Strip HTML tags but preserve paragraph and line breaks for plain text
-  let text = html
+  let text = String(html || '')
     .replace(/<p[^>]*>/gi, '')
     .replace(/<\/p>/gi, '\n\n')
     .replace(/<br\s*\/?>/gi, '\n')
@@ -113,38 +126,40 @@ export function stripHtml(html) {
     .replace(/&nbsp;/g, ' ')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
-  const txt = document.createElement('textarea');
-  txt.innerHTML = text;
-  return txt.value;
+  return decodeEntities(text);
 }
 
-export function rssItemToEpisode(item, index, total, channelImage) {
-  const title = item.querySelector('title')?.textContent || '';
-  const pubDate = item.querySelector('pubDate')?.textContent || '';
-  const rawDesc = item.querySelector('description')?.textContent || '';
-  const description = decodeHtml(rawDesc);
-  const link = item.querySelector('link')?.textContent || '';
-  const enclosure = item.querySelector('enclosure');
-  const itunesImage = item.querySelector('itunes\\:image');
-  const mediaThumbnail = item.querySelector('media\\:thumbnail');
-
-  const slug = title
+function slugify(title) {
+  return title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .slice(0, 60)
     .replace(/-+$/, '');
+}
 
-  const durationEl = item.querySelector('itunes\\:duration');
-  let duration = durationEl?.textContent || '';
+function formatDuration(raw) {
+  let duration = raw || '';
   if (duration && !duration.includes(':')) {
     const secs = parseInt(duration);
-    const m = Math.floor(secs / 60);
-    const s = secs % 60;
-    duration = `${m}:${s.toString().padStart(2, '0')}`;
+    if (Number.isFinite(secs)) {
+      const m = Math.floor(secs / 60);
+      const s = secs % 60;
+      duration = `${m}:${s.toString().padStart(2, '0')}`;
+    }
   }
+  return duration;
+}
 
-  // Extract Spotify episode ID from URL if possible
+/**
+ * Builds the episode shape from parsed RSS fields.
+ * Shared by the browser (DOMParser) and Node/SSG (regex) parsers
+ * so slugs, dates and durations always stay identical.
+ */
+export function episodeFromFields(fields, index, total) {
+  const { title = '', pubDate = '', description = '', link = '', channelImage = '' } = fields;
+  const slug = slugify(title);
+
   const spotifyMatch = link.match(/episode\/([A-Za-z0-9]+)/);
   const spotifyEpisodeId = spotifyMatch ? spotifyMatch[1] : '';
 
@@ -153,11 +168,29 @@ export function rssItemToEpisode(item, index, total, channelImage) {
     number: total - index,
     title,
     date: pubDate ? new Date(pubDate).toISOString().split('T')[0] : '',
-    duration,
-    description,
-    image: itunesImage?.getAttribute('href') || mediaThumbnail?.getAttribute('url') || channelImage || '/imgs/the podcast.png',
-    audioUrl: enclosure?.getAttribute('url') || '',
+    duration: formatDuration(fields.durationRaw),
+    description: decodeHtml(description),
+    image: fields.itunesImage || fields.mediaThumbnailUrl || channelImage || '/imgs/the podcast.png',
+    audioUrl: fields.enclosureUrl || '',
     spotifyEpisodeId,
     spotifyUrl: spotifyEpisodeId ? `https://open.spotify.com/episode/${spotifyEpisodeId}` : (link || 'https://open.spotify.com/show/2VgMTD1eFU6R66XkZtRqEJ'),
   };
+}
+
+/**
+ * Converts an RSS item (DOMParser) to the episode shape above.
+ * Call this when merging RSS feed data with static fallback.
+ */
+export function rssItemToEpisode(item, index, total, channelImage) {
+  return episodeFromFields({
+    title: item.querySelector('title')?.textContent || '',
+    pubDate: item.querySelector('pubDate')?.textContent || '',
+    description: item.querySelector('description')?.textContent || '',
+    link: item.querySelector('link')?.textContent || '',
+    enclosureUrl: item.querySelector('enclosure')?.getAttribute('url') || '',
+    itunesImage: item.querySelector('itunes\\:image')?.getAttribute('href') || '',
+    mediaThumbnailUrl: item.querySelector('media\\:thumbnail')?.getAttribute('url') || '',
+    channelImage,
+    durationRaw: item.querySelector('itunes\\:duration')?.textContent || '',
+  }, index, total);
 }

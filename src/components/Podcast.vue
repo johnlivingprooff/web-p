@@ -63,17 +63,16 @@
         All Episodes on Spotify
       </a>
       <a class="podcast__btn podcast__btn--ghost" href="https://pod.eiteone.org/" target="_blank" rel="noopener noreferrer">
-        Visit Podcast Site
+        Visit thought
       </a>
     </div>
   </section>
 </template>
 
 <script>
-import axios from 'axios';
 import { useRouter } from 'vue-router';
 import EpisodeCard from './EpisodeCard.vue';
-import { episodes as staticEpisodes, rssItemToEpisode } from '@/data/episodes.js';
+import { fetchEpisodes } from '@/data/rss.js';
 
 const PER_PAGE = 6;
 
@@ -103,13 +102,9 @@ export default {
   methods: {
     async fetchEpisodes() {
       try {
-        const res = await axios.get('https://anchor.fm/s/185e0d68/podcast/rss');
-        const doc = new DOMParser().parseFromString(res.data, 'text/xml');
-        const items = Array.from(doc.querySelectorAll('item'));
-        const channelImage = doc.querySelector('channel > itunes\\:image')?.getAttribute('href');
-        this.episodes = items.map((item, i) => rssItemToEpisode(item, i, items.length, channelImage));
+        this.episodes = await fetchEpisodes();
       } catch {
-        this.episodes = staticEpisodes;
+        this.episodes = [];
       } finally {
         this.loading = false;
         this.$nextTick(() => this.observeReveal());
@@ -253,7 +248,7 @@ export default {
 
 .podcast__btn--ghost:hover {
   background: var(--color-heading, #0a0a0a);
-  color: var(--c-off-white, #f5f4f0);
+  color: var(--color-background, #f5f4f0);
 }
 
 /* Reveal animation */

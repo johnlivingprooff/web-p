@@ -120,6 +120,9 @@ export default {
   font-weight: 600;
   color: var(--color-heading, #0a0a0a);
   line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ep-card__meta {
