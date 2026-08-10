@@ -3,7 +3,7 @@ export const projects = [
   {
     id: '81px',
     title: '81PIXELS',
-    href: 'https://81px.vercel.app/',
+    href: 'https://eiteone.org',
     image: '/imgs/projs/web-apps.png',
     summary: 'A showcase of creative web applications and interactions.',
     tags: ['showcase', 'apps', 'creative'],
@@ -30,7 +30,7 @@ export const projects = [
   {
     id: 'eden',
     title: 'Eden Estate Hotel & Resort',
-    href: 'https://edenestatesmw-v2.vercel.app/',
+    href: 'https://edenestatesmw.com/',
     image: '/imgs/clients/04.png',
     summary: 'Hospitality website for a hotel & resort.',
     tags: ['hospitality', 'booking'],
@@ -55,15 +55,6 @@ export const projects = [
     status: 'building'
   },
   {
-    id: 'alo-hospital',
-    title: 'Alo-Hospital',
-    href: 'https://hospitalmanagementmihr.netlify.app/',
-    image: '/imgs/projs/social_cover_2.png',
-    summary: 'Enterprise-grade hospital management system.',
-    tags: ['health', 'enterprise'],
-    status: 'live'
-  },
-  {
     id: 'habicore-pos',
     title: 'Habicore POS',
     href: 'https://habicore-pos-frontend.vercel.app/',
@@ -79,6 +70,24 @@ export const projects = [
     image: '/imgs/projs/web-apps.png',
     summary: 'Sales dashboard for tracking performance, analytics, and customer insights.',
     tags: ['commerce', 'platform', 'enterprise'],
+    status: 'live'
+  },
+  {
+    id: 'we-care-malawi',
+    title: 'We Care Malawi',
+    href: 'https://wecaremalawi.com',
+    image: '/imgs/projs/web-apps.png',
+    summary: 'Website for We Care Malawi.',
+    tags: ['nonprofit', 'community'],
+    status: 'live'
+  },
+  {
+    id: '265-business-angels',
+    title: '265 Business Angels',
+    href: 'https://265businessangels.org',
+    image: '/imgs/projs/web-apps.png',
+    summary: 'Website for 265 Business Angels.',
+    tags: ['business', 'community'],
     status: 'live'
   }
 ];
